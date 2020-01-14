@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="bottom"
+    android:background="@color/colorPrimary"
+    android:id="@+id/main_activity_ll"
+    tools:context=".UI.LogInScreen.LogInActivity"
+    android:fitsSystemWindows="false">
+
+    <TextView
+        android:id="@+id/welcome_tv"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_gravity="center|top"
+        android:text="@string/good_morning"
+        android:textColor="#EEFFFFFF"
+        android:textStyle="bold"
+        android:layout_marginBottom="250dp"
+        android:textSize="50sp"/>
+
+    <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:layout_gravity="bottom"
+        android:padding="25dp"
+        android:orientation="vertical"
+        android:background="@drawable/half_circle">
+
+        <TextView
+            android:id="@+id/message_tv"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/enter_id_exp"
+            android:gravity="center"/>
+
+        <EditText
+            android:id="@+id/id_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:textDirection="ltr"
+            android:inputType="phone"
+            android:hint="@string/enter_phone"
+            android:background="@drawable/edit_text_style"
+            android:padding="10dp"
+            android:gravity="center"
+            android:layout_margin="7dp"/>
+
+        <EditText
+            android:id="@+id/password_et"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPassword"
+            android:hint="@string/enter_password"
+            android:background="@drawable/edit_text_style"
+            android:padding="10dp"
+            android:gravity="center"
+            android:layout_margin="7dp"/>
+
+        <Button
+            android:id="@+id/signin_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:padding="15dp"
+            android:text="@string/login"
+            android:textColor="#ffffff"
+            android:drawableRight="@drawable/enter_icon" />
+
+        <TextView
+            android:gravity="center"
+            android:id="@+id/signup_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/sign_in"
+            android:drawableRight="@drawable/signup_icon"
+            android:linksClickable="true"
+            android:selectAllOnFocus="false"
+            android:textColor="#A3A3A3"
+            android:layout_marginTop="20dp"
+            android:autoLink="all"/>
+
+    </LinearLayout>
+
+
+</LinearLayout>

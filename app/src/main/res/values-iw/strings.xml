@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">DDC</string>
+    <string name="welcome">ברוכים הבאים!</string>
+    <string name="create_acount">צור חשבון חדש</string>
+    <string name="enter_id_exp">אפשר לקבל את המספר שלך?</string>
+    <string name="new_acount_ex">בוא נלמד כמה דברים עליך. שנתחיל?</string>
+    <string name="enter_password">סיסמה</string>
+    <string name="enter_phone">מספר טלפון</string>
+    <string name="enter_your_password">תוכל להגיד לנו מה הסיסמה הסודית שלך?</string>
+    <string name="good_morning">בוקר טוב!</string>
+    <string name="login">התחברות</string>
+    <string name="sign_in">מגיע לפה הרבה? בוא נפתח חשבון!</string>
+    <string name="first_name">שם פרטי</string>
+    <string name="last_name">שם משפחה</string>
+    <string name="city">עיר מגורים</string>
+    <string name="street">רחוב</string>
+    <string name="home_number">מספר בית</string>
+    <string name="where_you_live">אנחנו צריכים לדעת איפה אתה גר. זה חשוב בשביל המשלוח של החבילות שלך.</string>
+    <string name="worng_phone_number">מספר טלפון לא תקין</string>
+    <string name="worng_first_name">השם הפרטי קצר מידי...</string>
+    <string name="worng_last_name">שם המשפחה קצר מידי...</string>
+    <string name="worng_city">העיר שלך לא קיימת!</string>
+    <string name="worng_street">השם של הרחוב קצר מידי...</string>
+    <string name="worng_home_number">אתה בטוח שזה מספר הבית שלך?</string>
+    <string name="general_error">שגיאה. תוכל לנסות שוב מאוחר יותר?</string>
+    <string name="action_settings">הגדרות</string>
+    <string name="got_it">הבנתי</string>
+    <string name="new_member">מזל טוב! אתה עכשיו חבר רשמי באפליקציה. אתה יכול להתחיל את הפעילות שלך באפליקציה ממש עכשיו!</string>
+</resources>
