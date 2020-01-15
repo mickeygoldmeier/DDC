@@ -27,4 +27,6 @@
     <string name="action_settings">הגדרות</string>
     <string name="got_it">הבנתי</string>
     <string name="new_member">מזל טוב! אתה עכשיו חבר רשמי באפליקציה. אתה יכול להתחיל את הפעילות שלך באפליקציה ממש עכשיו!</string>
+    <string name="friends_parcels">חבילות של חברים</string>
+    <string name="my_parcels">החבילות שלי</string>
 </resources>

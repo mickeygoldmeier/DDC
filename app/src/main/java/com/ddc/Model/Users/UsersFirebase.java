@@ -1,11 +1,6 @@
-package com.ddc.Model.Person;
-
-import android.os.Parcel;
+package com.ddc.Model.Users;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MediatorLiveData;
-import androidx.lifecycle.MutableLiveData;
 
 import com.ddc.Model.Action;
 import com.ddc.Model.NotifyDataChange;
@@ -19,28 +14,49 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
-public class PersonFirebase {
+public class UsersFirebase {
     static DatabaseReference usersRef;
-    static List<Person> userList;
-    static MutableLiveData<List<Person>> personLiveData;
+    static List<User> userList;
+    /**
+     * public static void updateParcel(final Parcel toUpdate, final Action<String> action) {
+     * final String key = toUpdate.getParcelID();
+     * <p>
+     * removeParcel(toUpdate.getParcelID(), new Action<String>() {
+     *
+     * @Override public void onSuccess(String obj) {
+     * addParcel(toUpdate, action);
+     * }
+     * @Override public void onFailure(Exception exception) {
+     * action.onFailure(exception);
+     * }
+     * @Override public void onProgress(String status, double percent) {
+     * action.onProgress(status, percent);
+     * }
+     * });
+     * }
+     **/
+    private static ChildEventListener userRefChildEventListener;
 
     static {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         usersRef = database.getReference("Users");
-        userList = new LinkedList<>();
-        personLiveData = new MediatorLiveData<>();
+        userList = new ArrayList<>();
+
+        UsersFirebase.notifyToUserList(new NotifyDataChange<List<User>>() {
+            @Override
+            public void OnDataChanged(List<User> obj) {
+                userList = obj;
+            }
+
+            @Override
+            public void onFailure(Exception exception) {
+            }
+        });
     }
 
-    private static void updateLiveData()
-    {
-        personLiveData.postValue(userList);
-        personLiveData.setValue(userList);
-    }
-
-    public static void addUser(final Person user, final Action<String> action) {
+    public static void addUser(final User user, final Action<String> action) {
         String key = user.getUserID();
         usersRef.child(key).setValue(user).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
@@ -53,18 +69,19 @@ public class PersonFirebase {
             public void onFailure(@NonNull Exception e) {
                 action.onFailure(e);
                 action.onProgress("error upload user data", 100);
+
             }
         });
     }
 
-
-    public static void removeUser(String userid, final Action<String> action) {
+    public static void removeParcel(String userid, final Action<String> action) {
         final String key = userid;
+
 
         usersRef.child(key).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                final Person value = dataSnapshot.getValue(Person.class);
+                final User value = dataSnapshot.getValue(User.class);
                 if (value == null)
                     action.onFailure(new Exception("user not find ..."));
                 else {
@@ -89,9 +106,7 @@ public class PersonFirebase {
         });
     }
 
-    private static ChildEventListener userRefChildEventListener;
-
-    public static void notifyToUserList(final NotifyDataChange<List<Person>> notifyDataChange) {
+    public static void notifyToUserList(final NotifyDataChange<List<User>> notifyDataChange) {
         if (notifyDataChange != null) {
             if (userRefChildEventListener != null) {
                 notifyDataChange.onFailure(new Exception("first unNotify user list"));
@@ -102,7 +117,7 @@ public class PersonFirebase {
             userRefChildEventListener = new ChildEventListener() {
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                    Person user;
+                    User user;
                     if (dataSnapshot.child("lastName").getValue() != null) {
                         user = dataSnapshot.getValue(Person.class);
                         userList.add(user);
@@ -112,8 +127,9 @@ public class PersonFirebase {
 
                 @Override
                 public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                    Person user = dataSnapshot.getValue(Person.class);
+                    User user = dataSnapshot.getValue(User.class);
                     String parcelid = dataSnapshot.getKey();
+
 
                     for (int i = 0; i < userList.size(); i++) {
                         if (userList.get(i).getUserID().equals(parcelid)) {
@@ -126,7 +142,7 @@ public class PersonFirebase {
 
                 @Override
                 public void onChildRemoved(DataSnapshot dataSnapshot) {
-                    Person user = dataSnapshot.getValue(Person.class);
+                    User user = dataSnapshot.getValue(User.class);
                     String parcelid = dataSnapshot.getKey();
 
                     for (int i = 0; i < userList.size(); i++) {
@@ -159,4 +175,7 @@ public class PersonFirebase {
         }
     }
 
+    public static List<User> getUsersList() {
+        return userList;
+    }
 }

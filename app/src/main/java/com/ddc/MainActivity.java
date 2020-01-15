@@ -1,39 +1,38 @@
 package com.ddc;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-
-import com.ddc.Model.Person.Person;
-import com.ddc.Model.Person.PersonRepository;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-
+import android.view.Menu;
 import android.view.View;
+import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.ddc.Model.Address;
+import com.ddc.Model.Parcel.Parcel;
+import com.ddc.Model.Parcel.ParcelRepository;
+import com.ddc.Model.Parcel.Parcel_Type;
+import com.ddc.Model.Users.Person;
+import com.ddc.Model.Users.User;
+import com.ddc.Model.Users.UsersFirebase;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 
-import androidx.drawerlayout.widget.DrawerLayout;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
-import android.view.Menu;
-import android.widget.TextView;
-
+import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
-    private PersonRepository repository;
     public static Person person;
 
     static { person = null; }
@@ -58,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow,
+                R.id.nav_friends_parcels, R.id.nav_my_parcels, R.id.nav_slideshow,
                 R.id.nav_tools, R.id.nav_share, R.id.nav_send)
                 .setDrawerLayout(drawer)
                 .build();
@@ -66,17 +65,34 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
-        repository = new PersonRepository(getApplication());
         Bundle bundle = getIntent().getExtras();
+        List lst = UsersFirebase.getUsersList();
+
+        //////////////////////////////////
+        List<User> users = new ArrayList<>();
+        Address address = new Address("Israel", "רחובות", "רמבם", 12);
+        Person person1 = new Person("+972509791362", "123", Calendar.getInstance(), address, "נתן", "מנור");
+        users.add(person1);
+        //////////////////////////////////
+
+
         String personID = bundle.getString("UserID");
-        for (Person person : repository.getAllPersons().getValue())
+        for (User person : users)
             if (person.getUserID().equals(personID))
-                this.person = person;
+                this.person = (Person) person;
+
         View headerView = navigationView.getHeaderView(0);
         TextView personName = headerView.findViewById(R.id.person_name_tv);
         personName.setText(this.person.getFirstName() + " " + this.person.getLastName());
         TextView personPhone = headerView.findViewById(R.id.person_phone_tv);
         personPhone.setText(this.person.getUserID());
+
+
+        /////////////////////////////////
+        ParcelRepository parcelRepository = new ParcelRepository(getApplication());
+        parcelRepository.insert(new Parcel(Parcel_Type.Envelope, true, 3, address, "+972509791362", "123456", "123"));
+        /////////////////////////////////
+
 
         writeLoginToPhoneMemory(person, this);
     }

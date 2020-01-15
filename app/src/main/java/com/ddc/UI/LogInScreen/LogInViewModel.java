@@ -4,29 +4,37 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.LiveData;
-import com.ddc.Model.Person.Person;
-import com.ddc.Model.Person.PersonRepository;
+
+import com.ddc.Model.NotifyDataChange;
+import com.ddc.Model.Users.User;
+import com.ddc.Model.Users.UsersFirebase;
 import com.ddc.Utils.CitiesList;
 import com.ddc.Utils.DataCheck;
 
-import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 public class LogInViewModel extends AndroidViewModel {
 
-    private PersonRepository repository;
-    private LiveData<List<Person>> allPerson;
+    private List<User> users;
 
     public LogInViewModel(@NonNull Application application) {
         super(application);
-        repository = new PersonRepository(application);
-        allPerson = repository.getAllPersons();
+
+        UsersFirebase.notifyToUserList(new NotifyDataChange<List<User>>() {
+            @Override
+            public void OnDataChanged(List<User> obj) {
+                users = obj;
+            }
+
+            @Override
+            public void onFailure(Exception exception) {
+            }
+        });
 
         // update the cites list
         CitiesList.UpdateCitiesList(getApplication().getApplicationContext());
@@ -35,7 +43,7 @@ public class LogInViewModel extends AndroidViewModel {
     // try log in to the app using the entered phone nu,ber and id
     public String logIn(String phone, String password) {
         try {
-            for (Person person : allPerson.getValue())
+            for (User person : users)
                 if (person.getUserID().equals(DataCheck.normalizePhoneNumber(phone)))
                     if (person.getPassword().equals(password)) {
                         return person.getUserID();

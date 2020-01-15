@@ -4,24 +4,23 @@ import android.app.Application;
 import android.content.Context;
 import android.graphics.Color;
 import android.widget.ArrayAdapter;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 
 import com.ddc.Model.Address;
-import com.ddc.Model.Person.Person;
-import com.ddc.Model.Person.PersonRepository;
+import com.ddc.Model.Users.Person;
+import com.ddc.Model.Users.UsersFirebase;
 import com.ddc.R;
 import com.ddc.Utils.CitiesList;
 import com.ddc.Utils.DataCheck;
+
 import java.util.GregorianCalendar;
 
 public class SignUpViewModel extends AndroidViewModel {
 
-    private PersonRepository repository;
-
     public SignUpViewModel(@NonNull Application application) {
         super(application);
-        repository = new PersonRepository(application);
     }
 
     // return the right color for the edit text of the phone number
@@ -82,7 +81,7 @@ public class SignUpViewModel extends AndroidViewModel {
 
             Person person = new Person(phoneNumber, "", new GregorianCalendar(1, 1, 1), address, firstName, lastName);
 
-            repository.insert(person);
+            UsersFirebase.addUser(person, null);
 
             return 1;
         } catch (Exception e) {

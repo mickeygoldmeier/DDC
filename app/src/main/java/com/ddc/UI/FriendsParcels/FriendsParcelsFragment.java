@@ -1,4 +1,4 @@
-package com.ddc.UI.home;
+package com.ddc.UI.FriendsParcels;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -6,35 +6,33 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.ddc.Model.Person.Person;
+import com.ddc.Model.Parcel.Parcel;
 import com.ddc.R;
 
 import java.util.List;
 
-public class HomeFragment extends Fragment {
+public class FriendsParcelsFragment extends Fragment {
 
-    private HomeViewModel homeViewModel;
+    private FriendsParcelsViewModel friendsParcelsViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        homeViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
+        friendsParcelsViewModel = ViewModelProviders.of(this).get(FriendsParcelsViewModel.class);
 
-        View root = inflater.inflate(R.layout.fragment_home, container, false);
+        View root = inflater.inflate(R.layout.fragment_friends_parcels, container, false);
 
         final TextView textView = root.findViewById(R.id.text_home);
-        homeViewModel.getAllnotes().observe(this, new Observer<List<Person>>() {
+        friendsParcelsViewModel.getAllParcels().observe(this, new Observer<List<Parcel>>() {
             @Override
-            public void onChanged(@Nullable List<Person> allPerson) {
+            public void onChanged(List<Parcel> parcels) {
                 String str = "";
-                for (Person person : allPerson)
-                    str += person.getFirstName() + " " + person.getLastName() + " " + person.getUserID() +
-                            " " + person.getAddress().toString() + "\n";
+                for (Parcel parcel : parcels)
+                    str += parcel.toString() + "\n";
                 textView.setText(str);
             }
         });
