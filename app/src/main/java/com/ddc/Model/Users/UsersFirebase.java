@@ -24,7 +24,7 @@ public class UsersFirebase {
 
     static {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        usersRef = database.getReference("Users");
+        usersRef = database.getReference("UsersManager");
         userList = new ArrayList<>();
 
     }
@@ -157,7 +157,7 @@ public class UsersFirebase {
         notifyToUserList(new NotifyDataChange<List<User>>() {
             @Override
             public void OnDataChanged(List<User> obj) {
-
+                UsersManager.setUsersList(obj);
             }
 
             @Override

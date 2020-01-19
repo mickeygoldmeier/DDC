@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -16,18 +17,16 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.ddc.Model.Address;
-import com.ddc.Model.NotifyDataChange;
 import com.ddc.Model.Parcel.Parcel;
 import com.ddc.Model.Parcel.ParcelRepository;
 import com.ddc.Model.Parcel.Parcel_Type;
 import com.ddc.Model.Users.Person;
 import com.ddc.Model.Users.User;
-import com.ddc.Model.Users.UsersFirebase;
+import com.ddc.Model.Users.UsersManager;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -67,21 +66,25 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navigationView, navController);
 
         Bundle bundle = getIntent().getExtras();
-
-        users = UsersFirebase.getUsersList();
-
-
         String personID = bundle.getString("UserID");
+
+        /*users = UsersManager.getUsersList();
+
+        while (users == null);
+
         for (User person : users)
             if (person.getUserID().equals(personID))
-                this.person = (Person) person;
-
-        View headerView = navigationView.getHeaderView(0);
-        TextView personName = headerView.findViewById(R.id.person_name_tv);
-        personName.setText(this.person.getFirstName() + " " + this.person.getLastName());
-        TextView personPhone = headerView.findViewById(R.id.person_phone_tv);
-        personPhone.setText(this.person.getUserID());
-
+                this.person = (Person) person;*/
+        try {
+            this.person = (Person) UsersManager.getUser(personID);
+            View headerView = navigationView.getHeaderView(0);
+            TextView personName = headerView.findViewById(R.id.person_name_tv);
+            personName.setText(this.person.getFirstName() + " " + this.person.getLastName());
+            TextView personPhone = headerView.findViewById(R.id.person_phone_tv);
+            personPhone.setText(this.person.getUserID());
+        } catch (Exception e) {
+            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+        }
 
         /////////////////////////////////
         ParcelRepository parcelRepository = new ParcelRepository(getApplication());

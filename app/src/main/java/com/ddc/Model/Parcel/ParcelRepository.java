@@ -33,7 +33,8 @@ public class ParcelRepository {
         ParcelFirebase.notifyToParcelList(new NotifyDataChange<List<Parcel>>() {
             @Override
             public void OnDataChanged(List<Parcel> obj) {
-                parcelDao.deleteAllParcels();
+                new DeleteAllParcelAsyncTask(parcelDao, RepositoryState.DATABASE).execute();
+                //parcelDao.deleteAllParcels();
                 for (Parcel parcel : obj)
                     try {
                         new InsertParcelAsyncTask(parcelDao, RepositoryState.DATABASE).execute(parcel);

@@ -32,7 +32,7 @@ public class FriendsParcelsFragment extends Fragment {
             public void onChanged(List<Parcel> parcels) {
                 String str = "";
                 for (Parcel parcel : parcels)
-                    str += parcel.toString() + "\n";
+                    str += parcel.getParcelID() + " " + parcel.getType() + " " + parcel.getCompanyID() + "\n";
                 textView.setText(str);
             }
         });
