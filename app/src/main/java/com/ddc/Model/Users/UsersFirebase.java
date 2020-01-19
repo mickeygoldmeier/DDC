@@ -19,24 +19,7 @@ import java.util.List;
 public class UsersFirebase {
     static DatabaseReference usersRef;
     static List<User> userList;
-    /**
-     * public static void updateParcel(final Parcel toUpdate, final Action<String> action) {
-     * final String key = toUpdate.getParcelID();
-     * <p>
-     * removeParcel(toUpdate.getParcelID(), new Action<String>() {
-     *
-     * @Override public void onSuccess(String obj) {
-     * addParcel(toUpdate, action);
-     * }
-     * @Override public void onFailure(Exception exception) {
-     * action.onFailure(exception);
-     * }
-     * @Override public void onProgress(String status, double percent) {
-     * action.onProgress(status, percent);
-     * }
-     * });
-     * }
-     **/
+
     private static ChildEventListener userRefChildEventListener;
 
     static {
@@ -44,17 +27,9 @@ public class UsersFirebase {
         usersRef = database.getReference("Users");
         userList = new ArrayList<>();
 
-        UsersFirebase.notifyToUserList(new NotifyDataChange<List<User>>() {
-            @Override
-            public void OnDataChanged(List<User> obj) {
-                userList = obj;
-            }
-
-            @Override
-            public void onFailure(Exception exception) {
-            }
-        });
     }
+
+
 
     public static void addUser(final User user, final Action<String> action) {
         String key = user.getUserID();
@@ -177,5 +152,18 @@ public class UsersFirebase {
 
     public static List<User> getUsersList() {
         return userList;
+    }
+    public static void start(){
+        notifyToUserList(new NotifyDataChange<List<User>>() {
+            @Override
+            public void OnDataChanged(List<User> obj) {
+
+            }
+
+            @Override
+            public void onFailure(Exception exception) {
+
+            }
+        });
     }
 }

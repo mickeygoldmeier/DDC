@@ -16,6 +16,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.ddc.Model.Address;
+import com.ddc.Model.NotifyDataChange;
 import com.ddc.Model.Parcel.Parcel;
 import com.ddc.Model.Parcel.ParcelRepository;
 import com.ddc.Model.Parcel.Parcel_Type;
@@ -34,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     public static Person person;
-
+    private List<User> users;
     static { person = null; }
 
     @Override
@@ -66,14 +67,8 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navigationView, navController);
 
         Bundle bundle = getIntent().getExtras();
-        List lst = UsersFirebase.getUsersList();
 
-        //////////////////////////////////
-        List<User> users = new ArrayList<>();
-        Address address = new Address("Israel", "רחובות", "רמבם", 12);
-        Person person1 = new Person("+972509791362", "123", Calendar.getInstance(), address, "נתן", "מנור");
-        users.add(person1);
-        //////////////////////////////////
+        users = UsersFirebase.getUsersList();
 
 
         String personID = bundle.getString("UserID");
@@ -90,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
 
         /////////////////////////////////
         ParcelRepository parcelRepository = new ParcelRepository(getApplication());
-        parcelRepository.insert(new Parcel(Parcel_Type.Envelope, true, 3, address, "+972509791362", "123456", "123"));
+        parcelRepository.insert(new Parcel(Parcel_Type.Envelope, true, 3, new Address(), "+972509791362", "123456", "123"));
         /////////////////////////////////
 
 

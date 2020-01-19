@@ -36,7 +36,7 @@ public class ParcelRepository {
                 parcelDao.deleteAllParcels();
                 for (Parcel parcel : obj)
                     try {
-                        parcelDao.insert(parcel);
+                        new InsertParcelAsyncTask(parcelDao, RepositoryState.DATABASE).execute(parcel);
                     } catch (Exception e) {
                     }
             }
