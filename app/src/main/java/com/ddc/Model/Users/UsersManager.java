@@ -1,13 +1,31 @@
 package com.ddc.Model.Users;
 
+import com.ddc.Model.NotifyDataChange;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 public class UsersManager {
     private static List<User> UsersList = new LinkedList<>();
+    private static boolean changed = false;
 
-    public static List<User> getUsersList() {
+    public static void activateUserManager(){
+        UsersFirebase.notifyToUserList(new NotifyDataChange<List<User>>() {
+            @Override
+            public void OnDataChanged(List<User> obj) {
+                UsersList = obj;
+                changed = true;
+            }
+
+            @Override
+            public void onFailure(Exception exception) {
+
+            }
+        });
+    }
+
+    public synchronized static List<User> getUsersList() {
         return UsersList;
     }
 

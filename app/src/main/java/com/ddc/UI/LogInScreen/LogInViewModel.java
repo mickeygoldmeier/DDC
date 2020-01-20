@@ -11,8 +11,10 @@ import androidx.lifecycle.AndroidViewModel;
 import com.ddc.Model.NotifyDataChange;
 import com.ddc.Model.Users.User;
 import com.ddc.Model.Users.UsersFirebase;
+import com.ddc.Model.Users.UsersManager;
 import com.ddc.Utils.CitiesList;
 import com.ddc.Utils.DataCheck;
+import com.ddc.Utils.FirebaseAuthentication;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -22,6 +24,7 @@ import java.util.List;
 public class LogInViewModel extends AndroidViewModel {
 
     private List<User> users = new ArrayList<>();
+    private FirebaseAuthentication authentication;
 
     public LogInViewModel(@NonNull Application application) {
         super(application);
@@ -29,6 +32,7 @@ public class LogInViewModel extends AndroidViewModel {
             @Override
             public void OnDataChanged(List<User> obj) {
                 users = obj;
+                UsersManager.setUsersList(obj);
             }
 
             @Override
@@ -51,6 +55,21 @@ public class LogInViewModel extends AndroidViewModel {
                     }
         } catch (Exception e) { }
         return null;
+    }
+
+    public void logInWithSMS(String phone, LogInActivity activity)
+    {
+        try {
+            phone = DataCheck.normalizePhoneNumber(phone);
+        } catch (Exception e){return;}
+
+        authentication = new FirebaseAuthentication(activity, phone);
+        authentication.startAuth();
+    }
+
+    public void checkSMSCode(String code)
+    {
+        authentication.signIn(code);
     }
 
     // return the id of the last user if the last login was in less then a week

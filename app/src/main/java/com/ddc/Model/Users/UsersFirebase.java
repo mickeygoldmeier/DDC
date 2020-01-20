@@ -97,7 +97,7 @@ public class UsersFirebase {
 
 
                     userList.add(user);
-                    UsersManager.setUsersList(userList);
+                    // UsersManager.setUsersList(userList);
                     notifyDataChange.OnDataChanged(userList);
                 }
 
