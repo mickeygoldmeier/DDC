@@ -1,5 +1,9 @@
 package com.ddc.Utils;
 
+import android.app.Activity;
+import android.util.Log;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -29,7 +33,8 @@ public class FirebaseAuthentication extends AppCompatActivity {
         auth.signOut();
     }
 
-    public void startAuth() {
+    public void startAuth()
+    {
         auth.useAppLanguage();
         authProvider = PhoneAuthProvider.getInstance();
         authProvider.verifyPhoneNumber(
@@ -56,7 +61,8 @@ public class FirebaseAuthentication extends AppCompatActivity {
                 });        // OnVerificationStateChangedCallback
     }
 
-    public void signIn(String code) {
+    public void signIn(String code)
+    {
         // [START verify_with_code]
         PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationId, code);
         // [END verify_with_code]
@@ -76,7 +82,7 @@ public class FirebaseAuthentication extends AppCompatActivity {
                             logInActivity.openMainScreen(userID);
                         } else {
                             // Sign in failed, display a message and update the UI
-                            if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
+                           if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
                                 // The verification code entered was invalid
                                 // [START_EXCLUDE silent]
                                 //mVerificationField.setError("Invalid code.");

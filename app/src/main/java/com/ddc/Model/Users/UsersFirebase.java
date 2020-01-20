@@ -20,7 +20,11 @@ public class UsersFirebase {
     static DatabaseReference usersRef;
     static List<User> userList;
 
-    private static ChildEventListener userRefChildEventListener;
+    static {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        usersRef = database.getReference("Users");
+        userList = new ArrayList<>();
+    }
 
 
     public static void addUser(final User user, final Action<String> action) {
@@ -73,13 +77,7 @@ public class UsersFirebase {
             }
         });
     }
-
-    static {
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        usersRef = database.getReference("Users");
-        userList = new ArrayList<>();
-    }
-
+    private static ChildEventListener userRefChildEventListener;
     public static void notifyToUserList(final NotifyDataChange<List<User>> notifyDataChange) {
         if (notifyDataChange != null) {
             if (userRefChildEventListener != null) {

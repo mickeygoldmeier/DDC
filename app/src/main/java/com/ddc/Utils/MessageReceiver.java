@@ -14,7 +14,7 @@ public class MessageReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         Bundle data = intent.getExtras();
         Object[] pdus = (Object[]) data.get("pdus");
-        for (int i = 0; i < pdus.length; i++) {
+        for(int i=0; i<pdus.length; i++){
             SmsMessage smsMessage = SmsMessage.createFromPdu((byte[]) pdus[i]);
             String message = "Sender : " + smsMessage.getDisplayOriginatingAddress()
                     + "Email From: " + smsMessage.getEmailFrom()
@@ -26,7 +26,7 @@ public class MessageReceiver extends BroadcastReceiver {
         }
     }
 
-    public void bindListener(MessageListener listener) {
+    public void bindListener(MessageListener listener){
         mListener = listener;
     }
 }

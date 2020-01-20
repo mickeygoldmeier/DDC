@@ -1,5 +1,7 @@
 package com.ddc.Model.Users;
 
+import com.ddc.Model.Address;
+
 import java.util.Calendar;
 
 public class Company extends User {
@@ -23,7 +25,7 @@ public class Company extends User {
 
     @Override
     public boolean search(String string) {
-        return (this.Name.contains(string)) || (this.getUserID().contains(string));
+        return (this.Name.contains(string))||(this.getUserID().contains(string));
     }
 
     @Override
@@ -35,7 +37,8 @@ public class Company extends User {
         //Calendar sixMonth = Calendar.getInstance();
         //sixMonth.set(0,6,1,0,0);
         //if (diffrence.equals(sixMonth))
-        return true;
+return true;
+
 
 
     }
