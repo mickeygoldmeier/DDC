@@ -22,14 +22,6 @@ public class UsersFirebase {
 
     private static ChildEventListener userRefChildEventListener;
 
-    static {
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        usersRef = database.getReference("UsersManager");
-        userList = new ArrayList<>();
-
-    }
-
-
 
     public static void addUser(final User user, final Action<String> action) {
         String key = user.getUserID();
@@ -48,6 +40,7 @@ public class UsersFirebase {
             }
         });
     }
+
 
     public static void removeParcel(String userid, final Action<String> action) {
         final String key = userid;
@@ -81,6 +74,12 @@ public class UsersFirebase {
         });
     }
 
+    static {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        usersRef = database.getReference("Users");
+        userList = new ArrayList<>();
+    }
+
     public static void notifyToUserList(final NotifyDataChange<List<User>> notifyDataChange) {
         if (notifyDataChange != null) {
             if (userRefChildEventListener != null) {
@@ -93,11 +92,15 @@ public class UsersFirebase {
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                     User user;
-                    if (dataSnapshot.child("lastName").getValue() != null) {
+                    if (dataSnapshot.child("lastName").getValue() != null)
                         user = dataSnapshot.getValue(Person.class);
-                        userList.add(user);
-                        notifyDataChange.OnDataChanged(userList);
-                    }
+                    else
+                        user = dataSnapshot.getValue(Company.class);
+
+
+                    userList.add(user);
+                    // UsersManager.setUsersList(userList);
+                    notifyDataChange.OnDataChanged(userList);
                 }
 
                 @Override
@@ -148,22 +151,5 @@ public class UsersFirebase {
             usersRef.removeEventListener(userRefChildEventListener);
             userRefChildEventListener = null;
         }
-    }
-
-    public static List<User> getUsersList() {
-        return userList;
-    }
-    public static void start(){
-        notifyToUserList(new NotifyDataChange<List<User>>() {
-            @Override
-            public void OnDataChanged(List<User> obj) {
-                UsersManager.setUsersList(obj);
-            }
-
-            @Override
-            public void onFailure(Exception exception) {
-
-            }
-        });
     }
 }

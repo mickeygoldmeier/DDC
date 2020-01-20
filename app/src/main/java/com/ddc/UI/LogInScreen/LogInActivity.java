@@ -5,7 +5,9 @@ import androidx.lifecycle.ViewModelProviders;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -15,12 +17,15 @@ import android.widget.TextView;
 import com.ddc.MainActivity;
 import com.ddc.R;
 import com.ddc.UI.SignUpScreen.SignUpScreen;
+import com.ddc.Utils.MessageListener;
+import com.ddc.Utils.MessageReceiver;
 
 import java.util.concurrent.TimeUnit;
 
-public class LogInActivity extends AppCompatActivity {
+public class LogInActivity extends AppCompatActivity implements MessageListener {
 
     private LogInViewModel logInViewModel;
+    private EditText password_et;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,39 +44,44 @@ public class LogInActivity extends AppCompatActivity {
         this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 
         // check if the last login was in less then a week
-        String lastUserID = logInViewModel.checkLastLogin(this);
+        // TODO: make it work!
+        /**String lastUserID = logInViewModel.checkLastLogin(this);
         if(lastUserID != null)
         {
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             intent.putExtra("UserID", lastUserID);
             this.finish();
             startActivity(intent);
-        }
+        }**/
 
         // log in to the next screen
         final EditText id_ed = findViewById(R.id.id_et);
         final TextView message_tv = findViewById(R.id.message_tv);
-        final Activity activity = this;
+        final LogInActivity activity = this;
+        this.password_et = findViewById(R.id.password_et);
         Button logIn = findViewById(R.id.signin_btn);
         logIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                EditText password_et = findViewById(R.id.password_et);
                 if (password_et.getVisibility() == EditText.VISIBLE) {
-                    String personID = logInViewModel.logIn(id_ed.getText().toString(), password_et.getText().toString());
-                    if(personID != null)
-                    {
-                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                        intent.putExtra("UserID", personID);
-                        activity.finish();
-                        startActivity(intent);
-                    }
-                } else {
+                    if(TextUtils.isEmpty(password_et.getText().toString()))
+                        message_tv.setText("Error");
+                    else
+                        logInViewModel.checkSMSCode(password_et.getText().toString());
+                } else if(!TextUtils.isEmpty(id_ed.getText().toString())) {
                     password_et.setVisibility(View.VISIBLE);
                     message_tv.setText(R.string.enter_your_password);
+                    logInViewModel.logInWithSMS(id_ed.getText().toString(), activity);
                 }
             }
         });
+
+        // listener for sms
+        MessageReceiver messageReceiver = new MessageReceiver();
+        messageReceiver.bindListener(this);
+        IntentFilter mIntentFilter = new IntentFilter();
+        mIntentFilter.addAction("android.provider.Telephony.SMS_RECEIVED");
+        registerReceiver(messageReceiver, mIntentFilter);
 
         // open the sign up screen
         TextView signUp = findViewById(R.id.signup_tv);
@@ -82,5 +92,18 @@ public class LogInActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+    }
+
+    public void openMainScreen(String userID)
+    {
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        intent.putExtra("UserID", userID);
+        this.finish();
+        startActivity(intent);
+    }
+
+    @Override
+    public void messageReceived(String message) {
+        password_et.setText(message);
     }
 }
