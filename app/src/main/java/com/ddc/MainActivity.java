@@ -17,16 +17,19 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.ddc.Model.Address;
+import com.ddc.Model.NotifyDataChange;
 import com.ddc.Model.Parcel.Parcel;
 import com.ddc.Model.Parcel.ParcelRepository;
 import com.ddc.Model.Parcel.Parcel_Type;
 import com.ddc.Model.Users.Person;
 import com.ddc.Model.Users.User;
+import com.ddc.Model.Users.UsersFirebase;
 import com.ddc.Model.Users.UsersManager;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -34,13 +37,24 @@ public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     public static Person person;
-    private List<User> users;
+    private List<User> users = new ArrayList<>();
     static { person = null; }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        UsersFirebase.stopNotifyToUserList();
+        UsersFirebase.notifyToUserList(new NotifyDataChange<List<User>>() {
+            @Override
+            public void OnDataChanged(List<User> obj) {
 
+            }
+
+            @Override
+            public void onFailure(Exception exception) {
+
+            }
+        });
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -68,13 +82,13 @@ public class MainActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         String personID = bundle.getString("UserID");
 
-        /*users = UsersManager.getUsersList();
 
-        while (users == null);
+        while (UsersManager.getUsersList().size() == 0);
+        users = UsersManager.getUsersList();
 
         for (User person : users)
             if (person.getUserID().equals(personID))
-                this.person = (Person) person;*/
+                this.person = (Person) person;
         try {
             this.person = (Person) UsersManager.getUser(personID);
             View headerView = navigationView.getHeaderView(0);

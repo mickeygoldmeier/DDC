@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 
+import com.ddc.Model.NotifyDataChange;
 import com.ddc.Model.Users.User;
 import com.ddc.Model.Users.UsersFirebase;
 import com.ddc.Utils.CitiesList;
@@ -24,19 +25,17 @@ public class LogInViewModel extends AndroidViewModel {
 
     public LogInViewModel(@NonNull Application application) {
         super(application);
-        UsersFirebase.start();
-        users = UsersFirebase.getUsersList();
-        /**UsersFirebase.notifyToUserList(new NotifyDataChange<List<User>>() {
+        UsersFirebase.notifyToUserList(new NotifyDataChange<List<User>>() {
             @Override
             public void OnDataChanged(List<User> obj) {
                 users = obj;
-        UsersManager.setUsersList(users);
             }
 
             @Override
             public void onFailure(Exception exception) {
+
             }
-        });**/
+        });
 
         // update the cites list
         CitiesList.UpdateCitiesList(getApplication().getApplicationContext());
