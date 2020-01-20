@@ -9,6 +9,22 @@ import java.util.List;
 public class UsersManager {
     private static List<User> UsersList = new LinkedList<>();
     private static boolean changed = false;
+    private static User user = new Person();
+
+
+    public static void getUserFromFirebase(String id){
+        UsersFirebase.getUser(id, new NotifyDataChange<User>() {
+            @Override
+            public void OnDataChanged(User obj) {
+                user = obj;
+            }
+
+            @Override
+            public void onFailure(Exception exception) {
+
+            }
+        });
+    }
 
     public static void activateUserManager(){
         UsersFirebase.notifyToUserList(new NotifyDataChange<List<User>>() {
@@ -27,6 +43,9 @@ public class UsersManager {
 
     public synchronized static List<User> getUsersList() {
         return UsersList;
+    }
+    public static User getUser() {
+        return user;
     }
 
     public static void setUsersList(List<User> usersList) {
