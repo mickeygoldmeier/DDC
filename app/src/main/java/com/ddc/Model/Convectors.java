@@ -2,6 +2,7 @@ package com.ddc.Model;
 
 import androidx.room.TypeConverter;
 
+import com.ddc.Model.Parcel.Parcel_Status;
 import com.ddc.Model.Parcel.Parcel_Type;
 
 import java.util.Calendar;
@@ -69,5 +70,18 @@ public class Convectors {
     public static Parcel_Type stringToParcelType(String value) {
         return value == null ? null : Parcel_Type.valueOf(value);
     }
+
+    // Convert Parcel_Type to String when extracting data from database
+    @TypeConverter
+    public static String parcelStatusToString(Parcel_Status value) {
+        return value == null ? null : value.name();
+    }
+
+    // Convert String to Parcel_Type when extracting data from database
+    @TypeConverter
+    public static Parcel_Status stringToParcelStatus(String value) {
+        return value == null ? null : Parcel_Status.valueOf(value);
+    }
+
 
 }

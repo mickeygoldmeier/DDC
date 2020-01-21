@@ -2,6 +2,7 @@ package com.ddc.Model.Parcel;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
@@ -11,6 +12,8 @@ import com.ddc.Model.NotifyDataChange;
 import com.ddc.Model.RepositoryState;
 import com.ddc.Utils.ConnectionCheck;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class ParcelRepository {
@@ -22,10 +25,13 @@ public class ParcelRepository {
     private String Id;
 
     // main constructor
-    public ParcelRepository(Application application, String id) {
+    public ParcelRepository(Application application) {
         ParcelDatabase database = ParcelDatabase.getInstance(application);
         parcelDao = database.dao();
-        Id = id;
+        SharedPreferences sharedPreferences = application.getApplicationContext().getSharedPreferences("com.DDC.LastLoginData", Context.MODE_PRIVATE);
+
+        Id = sharedPreferences.getString("LastLoginUserID", null);
+
 
         appContext = application.getApplicationContext();
         updateState();
