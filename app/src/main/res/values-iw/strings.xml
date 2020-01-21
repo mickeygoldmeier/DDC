@@ -30,4 +30,7 @@
     <string name="friends_parcels">חבילות של חברים</string>
     <string name="my_parcels">החבילות שלי</string>
     <string name="waiting_for_sms">מחכים לSMS עם הקוד...</string>
+    <string name="add_friends">מצא חברים</string>
+    <string name="system">מערכת</string>
+    <string name="logout">התנתקות</string>
 </resources>

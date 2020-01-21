@@ -41,4 +41,7 @@
     <string name="friends_parcels">Friends parcels</string>
     <string name="my_parcels">My parcels</string>
     <string name="waiting_for_sms">Waiting for the code SMS...</string>
+    <string name="add_friends">Add friends</string>
+    <string name="system">System</string>
+    <string name="logout">Log out</string>
 </resources>

@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -16,15 +15,10 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import com.ddc.Model.Address;
 import com.ddc.Model.NotifyDataChange;
-import com.ddc.Model.Parcel.Parcel;
-import com.ddc.Model.Parcel.ParcelRepository;
-import com.ddc.Model.Parcel.Parcel_Type;
 import com.ddc.Model.Users.Person;
 import com.ddc.Model.Users.User;
 import com.ddc.Model.Users.UsersFirebase;
-import com.ddc.Model.Users.UsersManager;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
@@ -47,7 +41,6 @@ public class MainActivity extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
         final String personID = bundle.getString("UserID");
-      //  UsersManager.getUserFromFirebase(personID);
 
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -79,19 +72,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void OnDataChanged(Person obj) {
                 person = obj;
-                UsersManager.setUser(person);
-                person = UsersManager.getUser();
-                try {
-                    Thread.sleep(2000);
-                    person = (Person) UsersManager.getUser(personID);
-                    View headerView = navigationView.getHeaderView(0);
-                    TextView personName = headerView.findViewById(R.id.person_name_tv);
-                    personName.setText(person.getFirstName() + " " + person.getLastName());
-                    TextView personPhone = headerView.findViewById(R.id.person_phone_tv);
-                    personPhone.setText(person.getUserID());
-                } catch (Exception e) {
-                    Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-                }
+                View headerView = navigationView.getHeaderView(0);
+                TextView personName = headerView.findViewById(R.id.person_name_tv);
+                personName.setText(person.getFirstName() + " " + person.getLastName());
+                TextView personPhone = headerView.findViewById(R.id.person_phone_tv);
+                personPhone.setText(person.getUserID());
             }
 
             @Override
@@ -99,16 +84,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-        users = UsersManager.getUsersList();
-
-
-        for (User person : users)
-            if (person.getUserID().equals(personID))
-         //       this.person = (Person) person;
-
-
-
-
 
         writeLoginToPhoneMemory(personID, this);
     }
