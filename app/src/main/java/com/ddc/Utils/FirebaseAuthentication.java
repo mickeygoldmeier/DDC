@@ -1,9 +1,5 @@
 package com.ddc.Utils;
 
-import android.app.Activity;
-import android.util.Log;
-import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -16,14 +12,13 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthSettings;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
-import com.google.firebase.auth.internal.zzl;
 
 import java.util.concurrent.TimeUnit;
 
 public class FirebaseAuthentication extends AppCompatActivity {
+    private PhoneAuthProvider.ForceResendingToken mResendToken;
     private String verificationId;
     private PhoneAuthProvider authProvider;
     private FirebaseAuth auth;
@@ -38,36 +33,48 @@ public class FirebaseAuthentication extends AppCompatActivity {
         auth.signOut();
     }
 
-    public void startAuth()
-    {
+    public void startAuth() {
         auth.useAppLanguage();
         authProvider = PhoneAuthProvider.getInstance();
 
         AuthCredential credential = PhoneAuthProvider.getCredential("+9725097913620", "518090");
         FirebaseAuthSettings user = FirebaseAuth.getInstance().getFirebaseAuthSettings();
 
-        authProvider.verifyPhoneNumber(
-                userID,             // Phone number to verify
-                60,              // Timeout duration
-                TimeUnit.SECONDS,   // Unit of timeout
-                logInActivity,      // Activity (for callback binding)
-                new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-                    @Override
-                    public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
-                        System.out.println(1);
-                    }
+        PhoneAuthProvider.OnVerificationStateChangedCallbacks callbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+            @Override
+            public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
+                FirebaseAuth.getInstance().signOut();
+            }
 
-                    @Override
-                    public void onVerificationFailed(FirebaseException e) {
+            @Override
+            public void onVerificationFailed(FirebaseException e) {
 
-                    }
+            }
 
-                    @Override
-                    public void onCodeSent(String s, PhoneAuthProvider.ForceResendingToken forceResendingToken) {
-                        super.onCodeSent(s, forceResendingToken);
-                        verificationId = s;
-                    }
-                });
+            @Override
+            public void onCodeSent(String s, PhoneAuthProvider.ForceResendingToken forceResendingToken) {
+                super.onCodeSent(s, forceResendingToken);
+                verificationId = s;
+                mResendToken = forceResendingToken;
+            }
+        };
+
+        if (mResendToken == null) {
+            authProvider.verifyPhoneNumber(
+                    userID,             // Phone number to verify
+                    60,              // Timeout duration
+                    TimeUnit.SECONDS,   // Unit of timeout
+                    logInActivity,      // Activity (for callback binding)
+                    callbacks);
+        } else {
+            authProvider.verifyPhoneNumber(
+                    userID,             // Phone number to verify
+                    60,              // Timeout duration
+                    TimeUnit.SECONDS,   // Unit of timeout
+                    logInActivity,      // Activity (for callback binding)
+                    callbacks,
+                    mResendToken);
+        }
     }
 
     public void signIn(String code)
