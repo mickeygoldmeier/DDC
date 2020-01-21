@@ -40,4 +40,5 @@
     <string name="new_member">Congratulations! you now officeily member in the app. You can start your activity in the app right now!</string>
     <string name="friends_parcels">Friends parcels</string>
     <string name="my_parcels">My parcels</string>
+    <string name="waiting_for_sms">Waiting for the code SMS...</string>
 </resources>

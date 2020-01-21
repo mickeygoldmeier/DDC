@@ -13,12 +13,14 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ddc.MainActivity;
 import com.ddc.R;
 import com.ddc.UI.SignUpScreen.SignUpScreen;
 import com.ddc.Utils.MessageListener;
 import com.ddc.Utils.MessageReceiver;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.concurrent.TimeUnit;
 
@@ -69,9 +71,12 @@ public class LogInActivity extends AppCompatActivity implements MessageListener 
                     else
                         logInViewModel.checkSMSCode(password_et.getText().toString());
                 } else if(!TextUtils.isEmpty(id_ed.getText().toString())) {
-                    password_et.setVisibility(View.VISIBLE);
-                    message_tv.setText(R.string.enter_your_password);
-                    logInViewModel.logInWithSMS(id_ed.getText().toString(), activity);
+                    // check if the user exist and then send him the SMS
+                    if(logInViewModel.logInWithSMS(id_ed.getText().toString(), activity))
+                    {
+                        password_et.setVisibility(View.VISIBLE);
+                        message_tv.setText(R.string.waiting_for_sms);
+                    }
                 }
             }
         });
@@ -105,5 +110,6 @@ public class LogInActivity extends AppCompatActivity implements MessageListener 
     @Override
     public void messageReceived(String message) {
         password_et.setText(message);
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 }

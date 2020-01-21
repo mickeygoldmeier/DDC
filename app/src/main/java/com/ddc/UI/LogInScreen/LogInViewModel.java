@@ -45,28 +45,23 @@ public class LogInViewModel extends AndroidViewModel {
         CitiesList.UpdateCitiesList(getApplication().getApplicationContext());
     }
 
-    // try log in to the app using the entered phone nu,ber and id
-    public String logIn(String phone, String password) {
-        try {
-            for (User person : users)
-                if (person.getUserID().equals(DataCheck.normalizePhoneNumber(phone)))
-                    if (person.getPassword().equals(password)) {
-                        return person.getUserID();
-                    }
-        } catch (Exception e) { }
-        return null;
-    }
-
-    public void logInWithSMS(String phone, LogInActivity activity)
+    // try log in to the app using the entered phone number
+    public boolean logInWithSMS(String phone, LogInActivity activity)
     {
         try {
             phone = DataCheck.normalizePhoneNumber(phone);
-        } catch (Exception e){return;}
-
-        authentication = new FirebaseAuthentication(activity, phone);
-        authentication.startAuth();
+            for(User user : users)
+                if(user.getUserID().equals(phone))
+                {
+                    authentication = new FirebaseAuthentication(activity, phone);
+                    authentication.startAuth();
+                    return true;
+                }
+        } catch (Exception e){}
+        return false;
     }
 
+    // check the entered SMS code
     public void checkSMSCode(String code)
     {
         authentication.signIn(code);
@@ -75,8 +70,6 @@ public class LogInViewModel extends AndroidViewModel {
     // return the id of the last user if the last login was in less then a week
     public String checkLastLogin(Activity activity)
     {
-
-
         try
         {
             SharedPreferences sharedPreferences = activity.getSharedPreferences("com.DDC.LastLoginData", Context.MODE_PRIVATE);
