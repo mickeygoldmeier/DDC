@@ -50,7 +50,7 @@ public class LogInActivity extends AppCompatActivity implements MessageListener 
         String lastUserID = logInViewModel.checkLastLogin(this);
         if(lastUserID != null)
         {
-            logInViewModel.getUser(lastUserID);
+            //logInViewModel.getUser(lastUserID);
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             intent.putExtra("UserID", lastUserID);
             this.finish();

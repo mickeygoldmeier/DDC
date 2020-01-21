@@ -17,11 +17,13 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.ddc.Model.Address;
+import com.ddc.Model.NotifyDataChange;
 import com.ddc.Model.Parcel.Parcel;
 import com.ddc.Model.Parcel.ParcelRepository;
 import com.ddc.Model.Parcel.Parcel_Type;
 import com.ddc.Model.Users.Person;
 import com.ddc.Model.Users.User;
+import com.ddc.Model.Users.UsersFirebase;
 import com.ddc.Model.Users.UsersManager;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
@@ -39,8 +41,14 @@ public class MainActivity extends AppCompatActivity {
     static { person = null; }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
+
+        Bundle bundle = getIntent().getExtras();
+        final String personID = bundle.getString("UserID");
+      //  UsersManager.getUserFromFirebase(personID);
+
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -52,8 +60,9 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        NavigationView navigationView = findViewById(R.id.nav_view);
+        final NavigationView navigationView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
@@ -65,33 +74,43 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
-        Bundle bundle = getIntent().getExtras();
-        String personID = bundle.getString("UserID");
 
+        UsersFirebase.getUser(personID, new NotifyDataChange<Person>() {
+            @Override
+            public void OnDataChanged(Person obj) {
+                person = obj;
+                UsersManager.setUser(person);
+                person = UsersManager.getUser();
+                try {
+                    Thread.sleep(2000);
+                    person = (Person) UsersManager.getUser(personID);
+                    View headerView = navigationView.getHeaderView(0);
+                    TextView personName = headerView.findViewById(R.id.person_name_tv);
+                    personName.setText(person.getFirstName() + " " + person.getLastName());
+                    TextView personPhone = headerView.findViewById(R.id.person_phone_tv);
+                    personPhone.setText(person.getUserID());
+                } catch (Exception e) {
+                    Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Exception exception) {
+
+            }
+        });
         users = UsersManager.getUsersList();
+
 
         for (User person : users)
             if (person.getUserID().equals(personID))
-                this.person = (Person) person;
-        person = UsersManager.getUser();
-        try {
-            this.person = (Person) UsersManager.getUser(personID);
-            View headerView = navigationView.getHeaderView(0);
-            TextView personName = headerView.findViewById(R.id.person_name_tv);
-            personName.setText(this.person.getFirstName() + " " + this.person.getLastName());
-            TextView personPhone = headerView.findViewById(R.id.person_phone_tv);
-            personPhone.setText(this.person.getUserID());
-        } catch (Exception e) {
-            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-        }
-
-        /////////////////////////////////
-        ParcelRepository parcelRepository = new ParcelRepository(getApplication());
-        parcelRepository.insert(new Parcel(Parcel_Type.Envelope, true, 3, new Address(), "+972509791362", "123456", "123"));
-        /////////////////////////////////
+         //       this.person = (Person) person;
 
 
-        writeLoginToPhoneMemory(person, this);
+
+
+
+        writeLoginToPhoneMemory(personID, this);
     }
 
     @Override
@@ -109,11 +128,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // write the last login data on the phone memory using SharedPreferences
-    private void writeLoginToPhoneMemory(Person person, Activity activity)
+    private void writeLoginToPhoneMemory(String person, Activity activity)
     {
         SharedPreferences.Editor editor = getSharedPreferences("com.DDC.LastLoginData", MODE_PRIVATE).edit();
         editor.putString("LastLoginTime", Calendar.getInstance().getTime().toString());
-        editor.putString("LastLoginUserID", person.getUserID());
+        editor.putString("LastLoginUserID", person);
         editor.apply();
     }
 }

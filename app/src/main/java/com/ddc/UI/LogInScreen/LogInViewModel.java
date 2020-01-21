@@ -43,10 +43,6 @@ public class LogInViewModel extends AndroidViewModel {
 
         // update the cites list
         CitiesList.UpdateCitiesList(getApplication().getApplicationContext());
-
-        //if (checkLastLogin(this) != null)
-         //   UsersManager.getUserFromFirebase(checkLastLogin(this));
-
     }
 
     // try log in to the app using the entered phone number
@@ -72,6 +68,7 @@ public class LogInViewModel extends AndroidViewModel {
     }
 
     public void getUser(String id){
+        UsersFirebase.stopNotifyToUserList();
         UsersManager.getUserFromFirebase(id);
     }
 
@@ -89,8 +86,10 @@ public class LogInViewModel extends AndroidViewModel {
             {
                 String lastLoginUserID = sharedPreferences.getString("LastLoginUserID", null);
 
-                if(lastLoginUserID != null)
+                if(lastLoginUserID != null) {
+                 //   UsersManager.getUserFromFirebase(lastLoginUserID);
                     return lastLoginUserID;
+                }
             }
         } catch (Exception e){}
         return null;

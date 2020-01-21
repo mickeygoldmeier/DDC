@@ -19,7 +19,7 @@ import java.util.List;
 public class UsersFirebase {
     static DatabaseReference usersRef;
     static List<User> userList;
-    static User user;
+    static Person user;
 
     static {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -145,8 +145,8 @@ public class UsersFirebase {
         }
     }
 
-    public static void getUser(String id ,final NotifyDataChange<User> notifyDataChange){
-        usersRef.child(id);
+    public static void getUser(String id ,final NotifyDataChange<Person> notifyDataChange){
+        DatabaseReference userRef = usersRef.child(id);
         ValueEventListener valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -159,7 +159,8 @@ public class UsersFirebase {
                 //Don't ignore errors!
             }
         };
-        usersRef.addListenerForSingleValueEvent(valueEventListener);
+
+        userRef.addListenerForSingleValueEvent(valueEventListener);
     }
 
 
