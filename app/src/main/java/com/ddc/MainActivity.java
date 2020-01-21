@@ -73,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
         for (User person : users)
             if (person.getUserID().equals(personID))
                 this.person = (Person) person;
+        person = UsersManager.getUser();
         try {
             this.person = (Person) UsersManager.getUser(personID);
             View headerView = navigationView.getHeaderView(0);
