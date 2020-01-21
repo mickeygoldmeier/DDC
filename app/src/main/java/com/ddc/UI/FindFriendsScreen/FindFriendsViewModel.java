@@ -1,7 +1,5 @@
 package com.ddc.UI.FindFriendsScreen;
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.ddc.Model.NotifyDataChange;
@@ -14,18 +12,11 @@ import java.util.List;
 
 public class FindFriendsViewModel extends ViewModel {
 
-    private MutableLiveData<String> mText;
     private List<Person> users;
 
     public FindFriendsViewModel() {
-        mText = new MutableLiveData<>();
-        mText.setValue("This is slideshow fragment");
         getUsers();
 
-    }
-
-    public LiveData<String> getText() {
-        return mText;
     }
 
     private List<Person> getPersonFromUsers(List<User> users){

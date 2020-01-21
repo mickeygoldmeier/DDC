@@ -2,18 +2,15 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/parcel_view_cv"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:layout_marginStart="10dp"
-    android:layout_marginTop="5dp"
     android:layout_marginEnd="10dp"
-    android:layout_marginBottom="20dp"
-    android:clickable="true"
+    android:layout_marginTop="10dp"
     app:cardCornerRadius="10dp"
-    app:cardElevation="10dp"
-    app:cardMaxElevation="20dp"
+    app:cardElevation="5dp"
+    app:cardMaxElevation="10dp"
     tools:context=".UI.ParcelViewHolder">
 
     <LinearLayout
@@ -22,6 +19,12 @@
         android:orientation="vertical"
         android:padding="15dp">
 
+        <ImageView
+            android:id="@+id/type_iv"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:src="@drawable/ic_parcel" />
+
         <TextView
             android:id="@+id/parcel_id_tv"
             android:layout_width="match_parent"
@@ -29,7 +32,7 @@
             android:gravity="center"
             android:text="@android:string/untitled"
             android:textColor="#000000"
-            android:textSize="15dp"
+            android:textSize="15sp"
             android:textStyle="bold" />
 
         <GridLayout
@@ -65,17 +68,117 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
                 android:layout_marginEnd="20dp"
-                android:text="נמען:" />
+                android:text="מיקום החבילה: " />
 
             <TextView
-                android:id="@+id/parcel_recipient_tv"
+                android:id="@+id/parcel_location_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
-                android:text="+97206541358"
-                android:textColor="@color/colorPrimaryDark"
-                android:textDirection="ltr" />
+                android:text="מעטפה"
+                android:textColor="@color/colorPrimaryDark" />
         </GridLayout>
+
+        <LinearLayout
+            android:id="@+id/extra_info_ll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:layout_marginEnd="20dp"
+                    android:text="שולח: " />
+
+                <TextView
+                    android:id="@+id/parcel_sender_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:text="מעטפה"
+                    android:textColor="@color/colorPrimaryDark" />
+            </GridLayout>
+
+            <GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:layout_marginEnd="20dp"
+                    android:text="סטטוס: " />
+
+                <TextView
+                    android:id="@+id/parcel_status_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:text="מעטפה"
+                    android:textColor="@color/colorPrimaryDark" />
+            </GridLayout>
+
+            <LinearLayout
+                android:id="@+id/choose_deliver_ll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:background="@color/colorPrimaryDark" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="20dp"
+                    android:text="מי החבר שהכי תרצה שיעביר לך את החבילה?" />
+
+                <RadioGroup
+                    android:id="@+id/choose_deliver_rb"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <RadioButton
+                        android:id="@+id/radioButton4"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="RadioButton" />
+
+                    <RadioButton
+                        android:id="@+id/radioButton3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="RadioButton" />
+                </RadioGroup>
+
+                <Button
+                    android:id="@+id/button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:text="Button" />
+
+            </LinearLayout>
+
+        </LinearLayout>
 
     </LinearLayout>
 </androidx.cardview.widget.CardView>
