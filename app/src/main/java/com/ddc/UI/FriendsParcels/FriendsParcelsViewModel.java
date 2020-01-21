@@ -1,13 +1,19 @@
 package com.ddc.UI.FriendsParcels;
 
 import android.app.Application;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.ddc.Model.Parcel.Parcel;
 import com.ddc.Model.Parcel.ParcelRepository;
+import com.ddc.R;
+import com.ddc.UI.ParcelViewHolder;
 
 import java.util.List;
 
@@ -22,23 +28,33 @@ public class FriendsParcelsViewModel extends AndroidViewModel {
         allParcel = repository.getAllParcels();
     }
 
-    public void insert(Parcel parcel) {
-        repository.insert(parcel);
-    }
-
-    public void update(Parcel parcel) {
-        repository.update(parcel);
-    }
-
-    public void delete(Parcel parcel) {
-        repository.delete(parcel);
-    }
-
-    public void deleteAllParcel() {
-        repository.deleteAllParcel();
-    }
-
     public LiveData<List<Parcel>> getAllParcels() {
         return allParcel;
+    }
+
+    // get new ParcelRecycleViewAdapter from this view model
+    public ParcelRecycleViewAdapter getNewParcelRecycleViewAdapter() {
+        return new ParcelRecycleViewAdapter();
+    }
+
+    // inner Parcel
+    public class ParcelRecycleViewAdapter extends RecyclerView.Adapter<ParcelViewHolder> {
+        @NonNull
+        @Override
+        public ParcelViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View v = LayoutInflater.from(getApplication().getApplicationContext()).inflate(R.layout.parcel_view_holder, parent, false);
+            return new ParcelViewHolder(v);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull ParcelViewHolder holder, int position) {
+            Parcel parcel = allParcel.getValue().get(position);
+            holder.fillView(parcel);
+        }
+
+        @Override
+        public int getItemCount() {
+            return allParcel.getValue().size();
+        }
     }
 }
