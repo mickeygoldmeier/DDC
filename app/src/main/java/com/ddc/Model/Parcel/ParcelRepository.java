@@ -19,18 +19,20 @@ public class ParcelRepository {
     private LiveData<List<Parcel>> allParcels;
     protected RepositoryState state;
     private Context appContext;
+    private String Id;
 
     // main constructor
-    public ParcelRepository(Application application) {
+    public ParcelRepository(Application application, String id) {
         ParcelDatabase database = ParcelDatabase.getInstance(application);
         parcelDao = database.dao();
+        Id = id;
 
         appContext = application.getApplicationContext();
         updateState();
         allParcels = parcelDao.getAllParcels();
         // the data need to be taking from the Firebase
 
-        ParcelFirebase.notifyToParcelList(new NotifyDataChange<List<Parcel>>() {
+        ParcelFirebase.notifyTouserParcelList(Id,new NotifyDataChange<List<Parcel>>() {
             @Override
             public void OnDataChanged(List<Parcel> obj) {
                 new DeleteAllParcelAsyncTask(parcelDao, RepositoryState.DATABASE).execute();

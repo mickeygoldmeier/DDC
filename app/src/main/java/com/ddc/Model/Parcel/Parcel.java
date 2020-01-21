@@ -19,6 +19,7 @@ public class Parcel {
     private Address DistributionCenterAddress;
     private String RecipientPhone;
     private String CompanyID;
+    private Parcel_Status parcelStatus;
 
     public Parcel() {
     }
@@ -31,6 +32,26 @@ public class Parcel {
         RecipientPhone = recipientPhone;
         ParcelID = parcelID;
         CompanyID = companyID;
+        parcelStatus = Parcel_Status.Registered;
+    }
+
+    public Parcel(Parcel_Type type, boolean fragile, double weight, Address distributionCenterAddress, String recipientPhone, String parcelID, String companyID,Parcel_Status parcel_status) {
+        Type = type;
+        Fragile = fragile;
+        Weight = weight;
+        DistributionCenterAddress = distributionCenterAddress;
+        RecipientPhone = recipientPhone;
+        ParcelID = parcelID;
+        CompanyID = companyID;
+        parcelStatus = parcel_status;
+    }
+
+    public Parcel_Status getParcelStatus() {
+        return parcelStatus;
+    }
+
+    public void setParcelStatus(Parcel_Status parcelStatus) {
+        this.parcelStatus = parcelStatus;
     }
 
     public String getCompanyID() {

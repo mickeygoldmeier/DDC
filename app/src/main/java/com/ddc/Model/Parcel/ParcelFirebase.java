@@ -19,12 +19,14 @@ import java.util.List;
 class ParcelFirebase {
     static DatabaseReference parcelsRef;
     static List<Parcel> parcelList;
+    static List<Parcel> userparcelList;
     private static ChildEventListener parcelRefChildEventListener;
 
     static {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         parcelsRef = database.getReference("RegisteredPackages");
         parcelList = new ArrayList<>();
+        userparcelList = new ArrayList<>();
     }
 
     public static void addParcel(final Parcel parcel, final Action<String> action) {
@@ -104,7 +106,7 @@ class ParcelFirebase {
     public static void notifyToParcelList(final NotifyDataChange<List<Parcel>> notifyDataChange) {
         if (notifyDataChange != null) {
             if (parcelRefChildEventListener != null) {
-                notifyDataChange.onFailure(new Exception("first unNotify student list"));
+                notifyDataChange.onFailure(new Exception("first unNotify parcel list"));
                 return;
             }
             parcelList.clear();
@@ -175,6 +177,80 @@ class ParcelFirebase {
         }
     }
 
+
+    public static void notifyTouserParcelList(String userId, final NotifyDataChange<List<Parcel>> notifyDataChange) {
+        if (notifyDataChange != null) {
+            if (parcelRefChildEventListener != null) {
+                notifyDataChange.onFailure(new Exception("first unNotify student list"));
+                return;
+            }
+            userparcelList.clear();
+
+            DatabaseReference userparcelRef = parcelsRef.child(userId);
+            parcelRefChildEventListener = new ChildEventListener() {
+                @Override
+                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                    Parcel parcel = dataSnapshot.getValue(Parcel.class);
+                    boolean flag = true;
+                    for (int i = 0; i < userparcelList.size(); i++) {
+                        if (userparcelList.get(i).getParcelID().equals(parcel.getParcelID())) {
+                            userparcelList.set(i, parcel);
+                            flag = false;
+                            break;
+                        }
+                    }
+                    if (flag)
+                        userparcelList.add(parcel);
+
+                    notifyDataChange.OnDataChanged(userparcelList);
+                }
+
+                @Override
+                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+
+                    Parcel parcel = dataSnapshot.getValue(Parcel.class);
+                    boolean flag = true;
+                    for (int i = 0; i < userparcelList.size(); i++) {
+                        if (userparcelList.get(i).getParcelID().equals(parcel.getParcelID())) {
+                            userparcelList.set(i, parcel);
+                            flag = false;
+                            break;
+                        }
+                    }
+                    if (flag)
+                        userparcelList.add(parcel);
+
+
+                    notifyDataChange.OnDataChanged(userparcelList);
+                }
+
+                @Override
+                public void onChildRemoved(DataSnapshot dataSnapshot) {
+                    String parcelid = dataSnapshot.getKey();
+
+                    for (int i = 0; i < userparcelList.size(); i++) {
+                        if (userparcelList.get(i).getParcelID() == parcelid) {
+                            userparcelList.remove(i);
+                            break;
+                        }
+                    }
+                    notifyDataChange.OnDataChanged(userparcelList);
+                }
+
+                @Override
+                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    notifyDataChange.onFailure(databaseError.toException());
+                }
+            };
+            userparcelRef.addChildEventListener(parcelRefChildEventListener);
+        }
+    }
+
     public static void stopNotifyToParcelList() {
         if (parcelRefChildEventListener != null) {
             parcelsRef.removeEventListener(parcelRefChildEventListener);
@@ -184,5 +260,9 @@ class ParcelFirebase {
 
     public static List<Parcel> getParcelList() {
         return parcelList;
+    }
+
+    public static List<Parcel> getUserparcelList() {
+        return userparcelList;
     }
 }
