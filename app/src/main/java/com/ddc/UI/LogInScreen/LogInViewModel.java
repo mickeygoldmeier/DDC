@@ -43,6 +43,7 @@ public class LogInViewModel extends AndroidViewModel {
 
         // update the cites list
         CitiesList.UpdateCitiesList(getApplication().getApplicationContext());
+
         //if (checkLastLogin(this) != null)
          //   UsersManager.getUserFromFirebase(checkLastLogin(this));
 
@@ -73,6 +74,10 @@ public class LogInViewModel extends AndroidViewModel {
     public void checkSMSCode(String code)
     {
         authentication.signIn(code);
+    }
+
+    public void getUser(String id){
+        UsersManager.getUserFromFirebase(id);
     }
 
     // return the id of the last user if the last login was in less then a week

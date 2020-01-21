@@ -9,14 +9,14 @@ import java.util.List;
 public class UsersManager {
     private static List<User> UsersList = new LinkedList<>();
     private static boolean changed = false;
-    private static User user = new Person();
+    private static Person user = new Person();
 
 
     public static void getUserFromFirebase(String id){
         UsersFirebase.getUser(id, new NotifyDataChange<User>() {
             @Override
             public void OnDataChanged(User obj) {
-                user = obj;
+                user = (Person) obj;
             }
 
             @Override
@@ -44,7 +44,7 @@ public class UsersManager {
     public synchronized static List<User> getUsersList() {
         return UsersList;
     }
-    public static User getUser() {
+    public static Person getUser() {
         return user;
     }
 

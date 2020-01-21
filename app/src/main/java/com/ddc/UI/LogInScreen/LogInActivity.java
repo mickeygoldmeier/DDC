@@ -45,14 +45,15 @@ public class LogInActivity extends AppCompatActivity implements MessageListener 
 
         // check if the last login was in less then a week
         // TODO: make it work!
-        /**String lastUserID = logInViewModel.checkLastLogin(this);
+        String lastUserID = logInViewModel.checkLastLogin(this);
         if(lastUserID != null)
         {
+            logInViewModel.getUser(lastUserID);
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             intent.putExtra("UserID", lastUserID);
             this.finish();
             startActivity(intent);
-        }**/
+        }
 
         // log in to the next screen
         final EditText id_ed = findViewById(R.id.id_et);
