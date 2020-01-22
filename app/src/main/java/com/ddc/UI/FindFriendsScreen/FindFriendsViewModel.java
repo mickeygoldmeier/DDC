@@ -32,6 +32,7 @@ public class FindFriendsViewModel extends AndroidViewModel {
     private Application application;
     private FindFriendsFragment fragment;
     private Person person;
+
     public FindFriendsViewModel(@NonNull Application application) {
         super(application);
 
@@ -64,9 +65,10 @@ public class FindFriendsViewModel extends AndroidViewModel {
         String userID = sharedPreferences.getString("LastLoginUserID", null);
         List<Person> people = new ArrayList<>();
 
+        // filter only the Persons in the contacts
         for (User user : users) {
             if (user instanceof Person)
-                if (userID == user.getUserID()) {
+                if (userID.equals(user.getUserID())) {
                     person = (Person) user;
                     continue;
                 }
@@ -78,22 +80,24 @@ public class FindFriendsViewModel extends AndroidViewModel {
 
     // check if the users is in the user contact
     private boolean contactExist(String phone, boolean firstTime) {
-        Uri lookUpURI = Uri.withAppendedPath(
-                ContactsContract.PhoneLookup.CONTENT_FILTER_URI,
-                Uri.encode(phone));
-        String[] phoneNumberProjection = {ContactsContract.PhoneLookup._ID, ContactsContract.PhoneLookup.NUMBER, ContactsContract.PhoneLookup.DISPLAY_NAME};
-        Cursor cur = application.getContentResolver().query(lookUpURI, phoneNumberProjection, null, null, null);
-        try {
-            if (cur.moveToFirst())
-                return true;
-        } finally {
-            if (cur != null)
-                cur.close();
-        }
+        if (fragment.checkPermission()) {
+            Uri lookUpURI = Uri.withAppendedPath(
+                    ContactsContract.PhoneLookup.CONTENT_FILTER_URI,
+                    Uri.encode(phone));
+            String[] phoneNumberProjection = {ContactsContract.PhoneLookup._ID, ContactsContract.PhoneLookup.NUMBER, ContactsContract.PhoneLookup.DISPLAY_NAME};
+            Cursor cur = application.getContentResolver().query(lookUpURI, phoneNumberProjection, null, null, null);
+            try {
+                if (cur.moveToFirst())
+                    return true;
+            } finally {
+                if (cur != null)
+                    cur.close();
+            }
 
-        // try again with no country code
-        if (firstTime)
-            return contactExist(phone.replace("+9725", "05"), false);
+            // try again with no country code
+            if (firstTime)
+                return contactExist(phone.replace("+9725", "05"), false);
+        }
         return false;
     }
 
