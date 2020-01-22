@@ -62,6 +62,7 @@ public class Person extends User {
     }
 
     public void addFriend(String id){
-        Friends.add(id);
+        if (!Friends.contains(id))
+            Friends.add(id);
     }
 }
