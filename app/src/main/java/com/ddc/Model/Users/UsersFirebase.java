@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 
 import com.ddc.Model.Action;
 import com.ddc.Model.NotifyDataChange;
-import com.ddc.Model.Parcel.Parcel;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.ChildEventListener;
@@ -121,10 +120,13 @@ public class UsersFirebase {
 
                 @Override
                 public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                    User user = dataSnapshot.getValue(User.class);
+                    User user;
+                    if (dataSnapshot.child("lastName").getValue() != null)
+                        user = dataSnapshot.getValue(Person.class);
+                    else
+                        user = dataSnapshot.getValue(Company.class);
+
                     String parcelid = dataSnapshot.getKey();
-
-
                     for (int i = 0; i < userList.size(); i++) {
                         if (userList.get(i).getUserID().equals(parcelid)) {
                             userList.set(i, user);

@@ -32,6 +32,7 @@ public class FindFriendsViewModel extends AndroidViewModel {
     private Application application;
     private FindFriendsFragment fragment;
     private Person person;
+    private FindFriendsViewModel thisViewModel;
 
     public FindFriendsViewModel(@NonNull Application application) {
         super(application);
@@ -52,6 +53,7 @@ public class FindFriendsViewModel extends AndroidViewModel {
         });
 
         this.application = application;
+        thisViewModel = this;
     }
 
     // set the using fragment to update when data changed
@@ -72,8 +74,8 @@ public class FindFriendsViewModel extends AndroidViewModel {
                     person = (Person) user;
                     continue;
                 }
-            if (contactExist(user.getUserID(), true))
-                people.add((Person) user);
+                if (contactExist(user.getUserID(), true))
+                    people.add((Person) user);
         }
         return people;
     }
@@ -105,7 +107,7 @@ public class FindFriendsViewModel extends AndroidViewModel {
         return new FriendsRecycleViewAdapter();
     }
 
-    private void addfriend(String id) {
+    public void addFriend(String id) {
         person.addFriend(id);
         UsersFirebase.updateUser(person, new Action<String>() {
             @Override
@@ -136,17 +138,8 @@ public class FindFriendsViewModel extends AndroidViewModel {
 
         @Override
         public void onBindViewHolder(@NonNull final NewFriendsViewHolder holder, final int position) {
-            Person person = users.get(position);
-            holder.fillView(person);
-
-            /*holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    boolean expanded = holder.isExpanded();
-                    holder.setExpanded(!expanded);
-                    notifyItemChanged(position);
-                }
-            });*/
+            Person friend = users.get(position);
+            holder.fillView(friend, thisViewModel);
         }
 
         @Override
