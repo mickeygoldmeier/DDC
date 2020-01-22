@@ -28,6 +28,8 @@ public class Person extends User {
     }
 
     public List<String> getFriends() {
+        if(Friends == null)
+            Friends = new ArrayList<>();
         return Friends;
     }
 

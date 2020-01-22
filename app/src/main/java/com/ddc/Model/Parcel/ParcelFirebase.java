@@ -16,7 +16,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-class ParcelFirebase {
+public class ParcelFirebase {
     static DatabaseReference parcelsRef;
     static List<Parcel> parcelList;
     static List<Parcel> userparcelList;
@@ -195,7 +195,6 @@ class ParcelFirebase {
                     userparcelList.add(parcel);
 
                 notifyDataChange.OnDataChanged(userparcelList);
-                userparcelList.clear();
             }
 
             @Override
