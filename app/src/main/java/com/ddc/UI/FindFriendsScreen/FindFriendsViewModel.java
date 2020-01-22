@@ -1,17 +1,21 @@
 package com.ddc.UI.FindFriendsScreen;
 
 import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.ddc.Model.Action;
 import com.ddc.Model.NotifyDataChange;
 import com.ddc.Model.Users.Person;
 import com.ddc.Model.Users.User;
@@ -27,7 +31,7 @@ public class FindFriendsViewModel extends AndroidViewModel {
     private List<Person> users;
     private Application application;
     private FindFriendsFragment fragment;
-
+    private Person person;
     public FindFriendsViewModel(@NonNull Application application) {
         super(application);
 
@@ -56,9 +60,16 @@ public class FindFriendsViewModel extends AndroidViewModel {
 
     // filtering the users
     private List<Person> getPersonFromUsers(List<User> users) {
+        SharedPreferences sharedPreferences = application.getApplicationContext().getSharedPreferences("com.DDC.LastLoginData", Context.MODE_PRIVATE);
+        String userID = sharedPreferences.getString("LastLoginUserID", null);
         List<Person> people = new ArrayList<>();
+
         for (User user : users) {
             if (user instanceof Person)
+                if (userID == user.getUserID()) {
+                    person = (Person) user;
+                    continue;
+                }
                 if (contactExist(user.getUserID(), true))
                     people.add((Person) user);
         }
@@ -88,6 +99,26 @@ public class FindFriendsViewModel extends AndroidViewModel {
 
     public FriendsRecycleViewAdapter getNewFriendsRecycleViewAdapter() {
         return new FriendsRecycleViewAdapter();
+    }
+
+    private void addfriend(String id){
+        person.addFriend(id);
+        UsersFirebase.updateUser(person, new Action<String>() {
+            @Override
+            public void onSuccess(String obj) {
+                Toast.makeText(application.getApplicationContext(), "you now have one more friend. do you still feel lonley?", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onFailure(Exception exception) {
+
+            }
+
+            @Override
+            public void onProgress(String status, double percent) {
+
+            }
+        });
     }
 
     // inner ParcelRecycleViewAdapter class

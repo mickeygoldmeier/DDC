@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 
 import com.ddc.Model.Action;
 import com.ddc.Model.NotifyDataChange;
+import com.ddc.Model.Parcel.Parcel;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.ChildEventListener;
@@ -47,6 +48,21 @@ public class UsersFirebase {
         });
     }
 
+    public static void updateUser(final User toUpdate, final Action<String> action) {
+        final String key = toUpdate.getUserID();
+        usersRef.child(key).setValue(toUpdate).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                action.onSuccess(key);
+                action.onProgress("updated user data", 100);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                action.onFailure(e);
+            }
+        });
+    }
 
     public static void removeParcel(String userid, final Action<String> action) {
         final String key = userid;
