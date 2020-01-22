@@ -77,6 +77,15 @@ public class FindFriendsViewModel extends AndroidViewModel {
                 if (contactExist(user.getUserID(), true))
                     people.add((Person) user);
         }
+
+        if (person != null) {
+            List<Person> newPeople = new ArrayList<>();
+            for (Person friend : people)
+                if (!person.getFriends().contains(friend.getUserID()))
+                    newPeople.add(friend);
+            return newPeople;
+        }
+
         return people;
     }
 
