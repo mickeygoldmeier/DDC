@@ -10,6 +10,7 @@ public class Person extends User {
     private List<String> Friends;
 
     public Person() {
+        Friends = new ArrayList<>();
     }
 
     public Person(String userID, String password, Calendar lastModified, com.ddc.Model.Address address, String firstName, String lastName) {
