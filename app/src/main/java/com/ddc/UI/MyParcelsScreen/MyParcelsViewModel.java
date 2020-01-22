@@ -24,6 +24,7 @@ public class MyParcelsViewModel extends AndroidViewModel {
 
     public MyParcelsViewModel(@NonNull Application application) {
         super(application);
+
         repository = new ParcelRepository(application);
         allParcel = repository.getAllParcels();
     }
@@ -49,7 +50,7 @@ public class MyParcelsViewModel extends AndroidViewModel {
         @Override
         public void onBindViewHolder(@NonNull final ParcelViewHolder holder, final int position) {
             Parcel parcel = allParcel.getValue().get(position);
-            holder.fillView(parcel);
+            holder.fillView(parcel, getApplication());
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

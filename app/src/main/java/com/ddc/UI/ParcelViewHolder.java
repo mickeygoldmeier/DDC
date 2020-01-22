@@ -1,8 +1,11 @@
 package com.ddc.UI;
 
+import android.content.Context;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -23,6 +26,7 @@ public class ParcelViewHolder extends RecyclerView.ViewHolder {
     private TextView location;
     private TextView sender;
     private TextView status;
+    private RadioGroup optionalDelivers;
     private LinearLayout chooseDeliverMenu;
     private boolean expanded;
 
@@ -37,10 +41,11 @@ public class ParcelViewHolder extends RecyclerView.ViewHolder {
         sender = itemView.findViewById(R.id.parcel_sender_tv);
         status = itemView.findViewById(R.id.parcel_status_tv);
         chooseDeliverMenu = itemView.findViewById(R.id.choose_deliver_ll);
+        optionalDelivers = itemView.findViewById(R.id.optional_delivers_rg);
         expanded = false;
     }
 
-    public void fillView(Parcel parcel_) {
+    public void fillView(Parcel parcel_, Context context) {
         this.parcel = parcel_;
 
         typeImage.setImageResource(ParcelDataConvertor.typeToImageInt(parcel.getType()));
@@ -52,6 +57,15 @@ public class ParcelViewHolder extends RecyclerView.ViewHolder {
 
         if (parcel.getParcelStatus() == Parcel_Status.CollectionOffered)
             chooseDeliverMenu.setVisibility(View.VISIBLE);
+
+        RadioButton button;
+        String[] arr = {"משה כהן", "דני ברזני", "אבי שמואלי"};
+        optionalDelivers.removeAllViews();
+        for (String name : arr) {
+            button = new RadioButton(context);
+            button.setText(name);
+            optionalDelivers.addView(button);
+        }
     }
 
     public boolean isExpanded() {

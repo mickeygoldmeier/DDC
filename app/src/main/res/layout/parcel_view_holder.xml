@@ -84,7 +84,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <GridLayout
                 android:layout_width="match_parent"
@@ -135,7 +135,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:visibility="gone">
+                android:gravity="center"
+                android:visibility="visible">
 
                 <View
                     android:layout_width="match_parent"
@@ -152,29 +153,25 @@
                     android:text="מי החבר שהכי תרצה שיעביר לך את החבילה?" />
 
                 <RadioGroup
-                    android:id="@+id/choose_deliver_rb"
+                    android:id="@+id/optional_delivers_rg"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
                     <RadioButton
-                        android:id="@+id/radioButton4"
+                        android:id="@+id/radioButton"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        style="@style/Widget.AppCompat.CompoundButton.RadioButton"
                         android:text="RadioButton" />
 
-                    <RadioButton
-                        android:id="@+id/radioButton3"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="RadioButton" />
                 </RadioGroup>
 
                 <Button
                     android:id="@+id/button"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="10dp"
-                    android:text="Button" />
+                    android:text="בחרתי" />
 
             </LinearLayout>
 
