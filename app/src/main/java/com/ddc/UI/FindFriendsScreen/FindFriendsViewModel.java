@@ -72,8 +72,8 @@ public class FindFriendsViewModel extends AndroidViewModel {
                     person = (Person) user;
                     continue;
                 }
-                if (contactExist(user.getUserID(), true))
-                    people.add((Person) user);
+            if (contactExist(user.getUserID(), true))
+                people.add((Person) user);
         }
         return people;
     }
@@ -105,7 +105,7 @@ public class FindFriendsViewModel extends AndroidViewModel {
         return new FriendsRecycleViewAdapter();
     }
 
-    private void addfriend(String id){
+    private void addfriend(String id) {
         person.addFriend(id);
         UsersFirebase.updateUser(person, new Action<String>() {
             @Override
