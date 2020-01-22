@@ -1,0 +1,8 @@
+<resources>
+    <declare-styleable name="NewFriendsViewHolder">
+        <attr name="friendString" format="string" />
+        <attr name="friendDimension" format="dimension" />
+        <attr name="friendColor" format="color" />
+        <attr name="friendDrawable" format="color|reference" />
+    </declare-styleable>
+</resources>

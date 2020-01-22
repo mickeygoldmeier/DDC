@@ -33,4 +33,8 @@
     <string name="add_friends">מצא חברים</string>
     <string name="system">מערכת</string>
     <string name="logout">התנתקות</string>
+    <string name="nav_header_title">מחכה לאינטרנט...</string>
+    <string name="navigation_drawer_close">סגור תפריט צד</string>
+    <string name="navigation_drawer_open">פתח תפריט צד</string>
+    <string name="nav_header_subtitle">אין אינטנרט בינתיים</string>
 </resources>
