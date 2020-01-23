@@ -2,13 +2,17 @@ package com.ddc.UI.FriendsParcels;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,6 +20,7 @@ import com.ddc.Model.Action;
 import com.ddc.Model.NotifyDataChange;
 import com.ddc.Model.Parcel.Parcel;
 import com.ddc.Model.Parcel.ParcelFirebase;
+import com.ddc.Model.Parcel.Parcel_Status;
 import com.ddc.Model.Users.Person;
 import com.ddc.Model.Users.User;
 import com.ddc.Model.Users.UsersFirebase;
@@ -61,25 +66,20 @@ public class FriendsParcelsViewModel extends AndroidViewModel {
     // set up the listener of the friendsParcels list
     private void notifyToFriendsParcels() {
         if (person.getFriends() != null && person.getFriends().size() != 0) {
-            for (String id : person.getFriends()) {
-                ParcelFirebase.notifyTouserParcelList(id, new NotifyDataChange<List<Parcel>>() {
+            for (final String id : person.getFriends()) {
+                ParcelFirebase.notifyToUserParcelList(id, new NotifyDataChange<List<Parcel>>() {
                     @Override
                     public void OnDataChanged(List<Parcel> obj) {
-                        List<Parcel> newList = new ArrayList<>();
 
                         for (Parcel parcel : obj) {
-                            boolean parcelFounded = false;
-                            for (Parcel parcel1 : friendsParcels)
-                                if (parcel1.getParcelID().equals(parcel.getParcelID())) {
-                                    newList.add(parcel);
-                                    parcelFounded = true;
-                                    break;
-                                }
-                            if (!parcelFounded)
-                                newList.add(parcel);
+                            Parcel originalParcel = searchParcelByID(parcel.getParcelID());
+                            if (friendsParcels.contains(originalParcel)) {
+                                friendsParcels.remove(originalParcel);
+                                friendsParcels.add(parcel);
+                            } else
+                                friendsParcels.add(parcel);
                         }
 
-                        friendsParcels = newList;
                         fragment.onUsersChange();
                     }
 
@@ -123,10 +123,44 @@ public class FriendsParcelsViewModel extends AndroidViewModel {
 
     public void addOptionalDeliver(Parcel parcel, String id) {
         parcel.addOptionalDeliver(id);
+        parcel.setParcelStatus(Parcel_Status.CollectionOffered);
         ParcelFirebase.updateParcel(parcel, new Action<String>() {
             @Override
             public void onSuccess(String obj) {
-                Toast.makeText(getApplication().getBaseContext(), "נשרמת כמוביל לחבילה הזאת", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplication().getBaseContext(), "נרשמת כמוביל לחבילה הזאת", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Exception exception) {
+
+            }
+
+            @Override
+            public void onProgress(String status, double percent) {
+
+            }
+        });
+    }
+
+    public void deliverHaveTheParcel(final Parcel parcel) {
+        parcel.setParcelStatus(Parcel_Status.Delivered);
+        ParcelFirebase.updateParcel(parcel, new Action<String>() {
+            @Override
+            public void onSuccess(String obj) {
+                new AlertDialog.Builder(fragment.getContext())
+                        .setTitle("הודע לבעלים של החבילה")
+                        .setMessage("מזל טוב!\nעכשיו אתה צריך להעביר את החבילה לבעלים שלה.\nרוצה להתקשר אליו?")
+                        .setPositiveButton("כן", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", parcel.getRecipientPhone(), null));
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                getApplication().startActivity((Intent) intent);
+                            }
+                        })
+                        .setNegativeButton("אין צורך", null)
+                        .show();
+                fragment.getRecyclerAdapter().notifyDataSetChanged();
             }
 
             @Override
@@ -169,5 +203,12 @@ public class FriendsParcelsViewModel extends AndroidViewModel {
         public int getItemCount() {
             return friendsParcels.size();
         }
+    }
+
+    private Parcel searchParcelByID(String id) {
+        for (Parcel parcel : friendsParcels)
+            if (parcel.getParcelID().equals(id))
+                return parcel;
+        return null;
     }
 }

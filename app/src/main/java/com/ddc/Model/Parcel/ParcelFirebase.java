@@ -178,7 +178,7 @@ public class ParcelFirebase {
     }
 
 
-    public static void notifyTouserParcelList(String userId, final NotifyDataChange<List<Parcel>> notifyDataChange) {
+    public static void notifyToUserParcelList(String userId, final NotifyDataChange<List<Parcel>> notifyDataChange) {
         DatabaseReference userparcelRef = parcelsRef.child(userId);
         ChildEventListener userparcelRefChildEventListener = new ChildEventListener() {
             @Override

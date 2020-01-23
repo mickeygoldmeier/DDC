@@ -42,6 +42,14 @@ public class FriendParcelViewHolder extends RecyclerView.ViewHolder {
                     viewModel.addOptionalDeliver(parcel, friend.getUserID());
             }
         });
+
+        parcelTaken.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (viewModel != null)
+                    viewModel.deliverHaveTheParcel(parcel);
+            }
+        });
     }
 
     public void fillView(Parcel _parcel, Person _user, Person _friend, FriendsParcelsViewModel _viewModel) {
@@ -50,9 +58,9 @@ public class FriendParcelViewHolder extends RecyclerView.ViewHolder {
         this.friend = _friend;
         this.viewModel = _viewModel;
 
+        distributionCenterAddress.setText(parcel.getDistributionCenterAddress().toString());
         try {
             to.setText(user.getFirstName() + " " + user.getLastName());
-            distributionCenterAddress.setText(parcel.getDistributionCenterAddress().toString());
             userAddress.setText(user.getAddress().toString());
         } catch (Exception e) {
         }
@@ -61,7 +69,7 @@ public class FriendParcelViewHolder extends RecyclerView.ViewHolder {
             if (!parcel.getOptionalDelivers().contains(friend.getUserID()))
                 suggestDelivery.setVisibility(View.VISIBLE);
 
-            if (parcel.getSelectedDeliver().equals(friend.getUserID()) && parcel.getParcelStatus() == Parcel_Status.CollectionOffered)
+            if (parcel.getSelectedDeliver().equals(friend.getUserID()) && parcel.getParcelStatus() == Parcel_Status.OnTheWay)
                 parcelTaken.setVisibility(View.VISIBLE);
         } catch (Exception e) {
         }

@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ddc.Model.Parcel.Parcel;
 import com.ddc.Model.Parcel.ParcelRepository;
+import com.ddc.Model.Parcel.Parcel_Status;
 import com.ddc.R;
 import com.ddc.UI.ViewHolders.ParcelViewHolder;
 
@@ -21,12 +22,14 @@ public class MyParcelsViewModel extends AndroidViewModel {
 
     private ParcelRepository repository;
     private LiveData<List<Parcel>> allParcel;
+    private MyParcelsViewModel thisViewModel;
 
     public MyParcelsViewModel(@NonNull Application application) {
         super(application);
 
         repository = new ParcelRepository(application);
         allParcel = repository.getAllParcels();
+        thisViewModel = this;
     }
 
     public LiveData<List<Parcel>> getAllParcels() {
@@ -36,6 +39,12 @@ public class MyParcelsViewModel extends AndroidViewModel {
     // get new ParcelRecycleViewAdapter from this view model
     public ParcelRecycleViewAdapter getNewParcelRecycleViewAdapter() {
         return new ParcelRecycleViewAdapter();
+    }
+
+    public void chooseParcelDeliver(Parcel parcel, String id) {
+        parcel.setSelectedDeliver(id);
+        parcel.setParcelStatus(Parcel_Status.OnTheWay);
+        repository.update(parcel);
     }
 
     // inner ParcelRecycleViewAdapter class
@@ -50,7 +59,7 @@ public class MyParcelsViewModel extends AndroidViewModel {
         @Override
         public void onBindViewHolder(@NonNull final ParcelViewHolder holder, final int position) {
             Parcel parcel = allParcel.getValue().get(position);
-            holder.fillView(parcel, getApplication());
+            holder.fillView(parcel, getApplication(), thisViewModel);
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

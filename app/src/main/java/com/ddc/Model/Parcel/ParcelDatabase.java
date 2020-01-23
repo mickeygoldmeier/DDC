@@ -9,7 +9,7 @@ import androidx.room.TypeConverters;
 
 import com.ddc.Model.Convectors;
 
-@Database(entities = {Parcel.class}, version = 2)
+@Database(entities = {Parcel.class}, version = 3)
 @TypeConverters({Convectors.class})
 public abstract class ParcelDatabase extends RoomDatabase {
 

@@ -12,8 +12,6 @@ import com.ddc.Model.NotifyDataChange;
 import com.ddc.Model.RepositoryState;
 import com.ddc.Utils.ConnectionCheck;
 
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 public class ParcelRepository {
@@ -32,17 +30,15 @@ public class ParcelRepository {
 
         Id = sharedPreferences.getString("LastLoginUserID", null);
 
-
         appContext = application.getApplicationContext();
         updateState();
         allParcels = parcelDao.getAllParcels();
         // the data need to be taking from the Firebase
 
-        ParcelFirebase.notifyTouserParcelList(Id,new NotifyDataChange<List<Parcel>>() {
+        ParcelFirebase.notifyToUserParcelList(Id, new NotifyDataChange<List<Parcel>>() {
             @Override
             public void OnDataChanged(List<Parcel> obj) {
                 new DeleteAllParcelAsyncTask(parcelDao, RepositoryState.DATABASE).execute();
-                //parcelDao.deleteAllParcels();
                 for (Parcel parcel : obj)
                     try {
                         new InsertParcelAsyncTask(parcelDao, RepositoryState.DATABASE).execute(parcel);
@@ -61,7 +57,7 @@ public class ParcelRepository {
     // decide if the data need to be imported from the phone or from the Firebase
     public void updateState() {
         if (ConnectionCheck.isOnline(appContext)) {
-            state = RepositoryState.FIREBASE;
+            state = RepositoryState.BOTH;
             synchronizeData();
         } else {
             state = RepositoryState.DATABASE;
@@ -161,11 +157,26 @@ public class ParcelRepository {
 
         @Override
         protected Void doInBackground(Parcel... parcels) {
-            if(repositorystate == RepositoryState.FIREBASE)
+            if (repositorystate == RepositoryState.FIREBASE || repositorystate == RepositoryState.BOTH)
             {
-                // TODO: להוסיף פונקציה של עדכון של האנשים
+                ParcelFirebase.updateParcel(parcels[0], new Action<String>() {
+                    @Override
+                    public void onSuccess(String obj) {
+
+                    }
+
+                    @Override
+                    public void onFailure(Exception exception) {
+
+                    }
+
+                    @Override
+                    public void onProgress(String status, double percent) {
+
+                    }
+                });
             }
-            else
+            if (repositorystate == RepositoryState.DATABASE || repositorystate == RepositoryState.BOTH)
                 parcelDao.update(parcels[0]);
             return null;
         }

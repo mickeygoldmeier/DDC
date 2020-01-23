@@ -39,29 +39,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="5dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:layout_marginEnd="20dp"
-                android:text="סוג החבילה: " />
-
-            <TextView
-                android:id="@+id/parcel_type_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:text="מעטפה"
-                android:textColor="@color/colorPrimaryDark" />
-        </GridLayout>
-
-        <GridLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="5dp">
+            android:paddingStart="5dp"
+            android:paddingTop="2dp"
+            android:paddingEnd="5dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -79,18 +59,44 @@
                 android:textColor="@color/colorPrimaryDark" />
         </GridLayout>
 
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingStart="5dp"
+            android:paddingTop="2dp"
+            android:paddingEnd="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_marginEnd="20dp"
+                android:text="סטטוס: " />
+
+            <TextView
+                android:id="@+id/parcel_status_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:text="מעטפה"
+                android:textColor="@color/colorPrimaryDark" />
+        </GridLayout>
+
         <LinearLayout
             android:id="@+id/extra_info_ll"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <GridLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:padding="5dp">
+                android:paddingStart="5dp"
+                android:paddingTop="2dp"
+                android:paddingEnd="5dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -112,17 +118,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:padding="5dp">
+                android:paddingStart="5dp"
+                android:paddingTop="2dp"
+                android:paddingEnd="5dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
                     android:layout_marginEnd="20dp"
-                    android:text="סטטוס: " />
+                    android:text="סוג החבילה: " />
 
                 <TextView
-                    android:id="@+id/parcel_status_tv"
+                    android:id="@+id/parcel_type_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
@@ -136,7 +144,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:gravity="center"
-                android:visibility="visible">
+                android:visibility="gone">
 
                 <View
                     android:layout_width="match_parent"
@@ -167,11 +175,14 @@
                 </RadioGroup>
 
                 <Button
-                    android:id="@+id/button"
+                    android:id="@+id/choose_deliver_btn"
+                    style="@style/button_style"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:drawableStart="@drawable/ic_local_shipping"
                     android:padding="10dp"
-                    android:text="בחרתי" />
+                    android:text="בחרתי, שיביא לי" />
 
             </LinearLayout>
 
