@@ -1,4 +1,4 @@
-package com.ddc.UI;
+package com.ddc.UI.ViewHolders;
 
 import android.view.View;
 import android.widget.Button;

@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ddc.Model.Parcel.Parcel;
 import com.ddc.Model.Parcel.ParcelRepository;
 import com.ddc.R;
-import com.ddc.UI.ParcelViewHolder;
+import com.ddc.UI.ViewHolders.ParcelViewHolder;
 
 import java.util.List;
 

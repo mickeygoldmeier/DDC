@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 2,
-    "identityHash": "a5021b737a73d32df8a52bdc199f3994",
+    "identityHash": "6448a3f3a7466a6c882a2498486cbb3c",
     "entities": [
       {
         "tableName": "parcels_table",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`ParcelID` TEXT NOT NULL, `Type` TEXT, `Fragile` INTEGER NOT NULL, `Weight` REAL NOT NULL, `DistributionCenterAddress` TEXT, `RecipientPhone` TEXT, `CompanyID` TEXT, `parcelStatus` TEXT, PRIMARY KEY(`ParcelID`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`ParcelID` TEXT NOT NULL, `Type` TEXT, `Fragile` INTEGER NOT NULL, `Weight` REAL NOT NULL, `DistributionCenterAddress` TEXT, `RecipientPhone` TEXT, `CompanyID` TEXT, `parcelStatus` TEXT, `selectedDeliver` TEXT, `optionalDelivers` TEXT, PRIMARY KEY(`ParcelID`))",
         "fields": [
           {
             "fieldPath": "ParcelID",
@@ -55,6 +55,18 @@
             "columnName": "parcelStatus",
             "affinity": "TEXT",
             "notNull": false
+          },
+          {
+            "fieldPath": "selectedDeliver",
+            "columnName": "selectedDeliver",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "optionalDelivers",
+            "columnName": "optionalDelivers",
+            "affinity": "TEXT",
+            "notNull": false
           }
         ],
         "primaryKey": {
@@ -70,7 +82,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a5021b737a73d32df8a52bdc199f3994')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '6448a3f3a7466a6c882a2498486cbb3c')"
     ]
   }
 }

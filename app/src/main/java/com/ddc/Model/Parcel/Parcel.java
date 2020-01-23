@@ -7,6 +7,9 @@ import androidx.room.PrimaryKey;
 import com.ddc.Model.Address;
 import com.ddc.Model.NotifyDataChange;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity(tableName = "parcels_table")
 public class Parcel {
 
@@ -20,8 +23,11 @@ public class Parcel {
     private String RecipientPhone;
     private String CompanyID;
     private Parcel_Status parcelStatus;
+    private String selectedDeliver;
+    private List<String> optionalDelivers;
 
     public Parcel() {
+        optionalDelivers = new ArrayList<>();
     }
 
     public Parcel(Parcel_Type type, boolean fragile, double weight, Address distributionCenterAddress, String recipientPhone, String parcelID, String companyID) {
@@ -82,6 +88,22 @@ public class Parcel {
         return Weight;
     }
 
+    public String getSelectedDeliver() {
+        return selectedDeliver;
+    }
+
+    public void setSelectedDeliver(String selectedDeliver) {
+        this.selectedDeliver = selectedDeliver;
+    }
+
+    public List<String> getOptionalDelivers() {
+        return optionalDelivers;
+    }
+
+    public void setOptionalDelivers(List<String> optionalDelivers) {
+        this.optionalDelivers = optionalDelivers;
+    }
+
     public void setWeight(double weight) throws Exception {
         if (weight <= 0)
             throw new Exception("weight cant be less or equal to 0");
@@ -125,6 +147,11 @@ public class Parcel {
             }
 
         });
+    }
+
+    public void addOptionalDeliver(String id) {
+        if (!optionalDelivers.contains(id))
+            optionalDelivers.add(id);
     }
 }
 

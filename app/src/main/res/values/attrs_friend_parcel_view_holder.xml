@@ -1,0 +1,8 @@
+<resources>
+    <declare-styleable name="FriendParcelViewHolder">
+        <attr name="friendsParcelsString" format="string" />
+        <attr name="friendsParcelsDimension" format="dimension" />
+        <attr name="friendsParcelsColor" format="color" />
+        <attr name="friendsParcelsDrawable" format="color|reference" />
+    </declare-styleable>
+</resources>

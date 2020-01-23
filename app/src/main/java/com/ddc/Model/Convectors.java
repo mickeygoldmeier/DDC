@@ -5,7 +5,9 @@ import androidx.room.TypeConverter;
 import com.ddc.Model.Parcel.Parcel_Status;
 import com.ddc.Model.Parcel.Parcel_Type;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 public class Convectors {
 
@@ -83,5 +85,23 @@ public class Convectors {
         return value == null ? null : Parcel_Status.valueOf(value);
     }
 
+    @TypeConverter
+    public static String stringListToList(List<String> list) {
+        String result = "";
+        for (String id : list)
+            result += id + "|";
+
+        return result.substring(0, result.length() - 1);
+    }
+
+    @TypeConverter
+    public static List<String> stringToStringList(String string) {
+        String[] stringArray = string.split("\\|");
+        List<String> stringList = new ArrayList<>();
+        for (String id : stringArray)
+            stringList.add(id);
+
+        return stringList;
+    }
 
 }

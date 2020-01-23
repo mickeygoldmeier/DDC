@@ -1,4 +1,4 @@
-package com.ddc.UI;
+package com.ddc.UI.ViewHolders;
 
 import android.content.Context;
 import android.view.View;

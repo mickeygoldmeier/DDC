@@ -11,7 +11,7 @@
     app:cardCornerRadius="10dp"
     app:cardElevation="5dp"
     app:cardMaxElevation="10dp"
-    tools:context=".UI.NewFriendsViewHolder">
+    tools:context=".UI.ViewHolders.NewFriendsViewHolder">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

@@ -21,7 +21,7 @@ import com.ddc.Model.Users.Person;
 import com.ddc.Model.Users.User;
 import com.ddc.Model.Users.UsersFirebase;
 import com.ddc.R;
-import com.ddc.UI.NewFriendsViewHolder;
+import com.ddc.UI.ViewHolders.NewFriendsViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;
