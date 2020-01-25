@@ -20,6 +20,7 @@ public class ParcelFirebase {
     static DatabaseReference parcelsRef;
     static List<Parcel> parcelList;
     static List<Parcel> userparcelList;
+    static List<Parcel> userfriendsparcelList;
     private static ChildEventListener parcelRefChildEventListener;
 
     static {
@@ -27,6 +28,7 @@ public class ParcelFirebase {
         parcelsRef = database.getReference("RegisteredPackages");
         parcelList = new ArrayList<>();
         userparcelList = new ArrayList<>();
+        userfriendsparcelList = new ArrayList<>();
     }
 
     public static void addParcel(final Parcel parcel, final Action<String> action) {
@@ -111,7 +113,7 @@ public class ParcelFirebase {
             }
             parcelList.clear();
 
-            ChildEventListener parcelRefChildEventListener = new ChildEventListener() {
+            parcelRefChildEventListener = new ChildEventListener() {
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                     for (DataSnapshot uniqueKeySnapshot : dataSnapshot.getChildren()) {
@@ -179,22 +181,94 @@ public class ParcelFirebase {
 
 
     public static void notifyToUserParcelList(String userId, final NotifyDataChange<List<Parcel>> notifyDataChange) {
+        if (notifyDataChange != null) {
+            if (parcelRefChildEventListener != null) {
+                notifyDataChange.onFailure(new Exception("first unNotify parcel list"));
+                return;
+            }
+            userparcelList.clear();
+            DatabaseReference userparcelRef = parcelsRef.child(userId);
+            parcelRefChildEventListener = new ChildEventListener() {
+                @Override
+                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                    Parcel parcel = dataSnapshot.getValue(Parcel.class);
+                    boolean flag = true;
+                    for (int i = 0; i < userparcelList.size(); i++) {
+                        if (userparcelList.get(i).getParcelID().equals(parcel.getParcelID())) {
+                            flag = false;
+                            break;
+                        }
+                    }
+                    if (flag)
+                        userparcelList.add(parcel);
+
+                    notifyDataChange.OnDataChanged(userparcelList);
+                }
+
+                @Override
+                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+
+                    Parcel parcel = dataSnapshot.getValue(Parcel.class);
+                    boolean flag = true;
+                    for (int i = 0; i < userparcelList.size(); i++) {
+                        if (userparcelList.get(i).getParcelID().equals(parcel.getParcelID())) {
+                            userparcelList.set(i, parcel);
+                            flag = false;
+                            break;
+                        }
+                    }
+                    if (flag)
+                        userparcelList.add(parcel);
+
+
+                    notifyDataChange.OnDataChanged(userparcelList);
+                }
+
+                @Override
+                public void onChildRemoved(DataSnapshot dataSnapshot) {
+                    String parcelid = dataSnapshot.getKey();
+
+                    for (int i = 0; i < userparcelList.size(); i++) {
+                        if (userparcelList.get(i).getParcelID() == parcelid) {
+                            userparcelList.remove(i);
+                            break;
+                        }
+                    }
+                    notifyDataChange.OnDataChanged(userparcelList);
+                }
+
+                @Override
+                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    notifyDataChange.onFailure(databaseError.toException());
+                }
+            };
+            userparcelRef.addChildEventListener(parcelRefChildEventListener);
+        }
+    }
+
+
+    public static void notifyToUserFriendsParcelList(String userId, final NotifyDataChange<List<Parcel>> notifyDataChange) {
         DatabaseReference userparcelRef = parcelsRef.child(userId);
-        ChildEventListener userparcelRefChildEventListener = new ChildEventListener() {
+        ChildEventListener newparcelRefChildEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Parcel parcel = dataSnapshot.getValue(Parcel.class);
                 boolean flag = true;
-                for (int i = 0; i < userparcelList.size(); i++) {
-                    if (userparcelList.get(i).getParcelID().equals(parcel.getParcelID())) {
+                for (int i = 0; i < userfriendsparcelList.size(); i++) {
+                    if (userfriendsparcelList.get(i).getParcelID().equals(parcel.getParcelID())) {
                         flag = false;
                         break;
                     }
                 }
                 if (flag)
-                    userparcelList.add(parcel);
+                    userfriendsparcelList.add(parcel);
 
-                notifyDataChange.OnDataChanged(userparcelList);
+                notifyDataChange.OnDataChanged(userfriendsparcelList);
             }
 
             @Override
@@ -203,33 +277,31 @@ public class ParcelFirebase {
 
                 Parcel parcel = dataSnapshot.getValue(Parcel.class);
                 boolean flag = true;
-                for (int i = 0; i < userparcelList.size(); i++) {
-                    if (userparcelList.get(i).getParcelID().equals(parcel.getParcelID())) {
-                        userparcelList.set(i, parcel);
+                for (int i = 0; i < userfriendsparcelList.size(); i++) {
+                    if (userfriendsparcelList.get(i).getParcelID().equals(parcel.getParcelID())) {
+                        userfriendsparcelList.set(i, parcel);
                         flag = false;
                         break;
                     }
                 }
                 if (flag)
-                    userparcelList.add(parcel);
+                    userfriendsparcelList.add(parcel);
 
 
-                notifyDataChange.OnDataChanged(userparcelList);
-                userparcelList.clear();
+                notifyDataChange.OnDataChanged(userfriendsparcelList);
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 String parcelid = dataSnapshot.getKey();
 
-                for (int i = 0; i < userparcelList.size(); i++) {
-                    if (userparcelList.get(i).getParcelID() == parcelid) {
-                        userparcelList.remove(i);
+                for (int i = 0; i < userfriendsparcelList.size(); i++) {
+                    if (userfriendsparcelList.get(i).getParcelID() == parcelid) {
+                        userfriendsparcelList.remove(i);
                         break;
                     }
                 }
-                notifyDataChange.OnDataChanged(userparcelList);
-                userparcelList.clear();
+                notifyDataChange.OnDataChanged(userfriendsparcelList);
             }
 
             @Override
@@ -241,8 +313,9 @@ public class ParcelFirebase {
                 notifyDataChange.onFailure(databaseError.toException());
             }
         };
-        userparcelRef.addChildEventListener(userparcelRefChildEventListener);
+        userparcelRef.addChildEventListener(newparcelRefChildEventListener);
     }
+
 
     public static void stopNotifyToParcelList() {
         if (parcelRefChildEventListener != null) {

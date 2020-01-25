@@ -67,7 +67,7 @@ public class FriendsParcelsViewModel extends AndroidViewModel {
     private void notifyToFriendsParcels() {
         if (person.getFriends() != null && person.getFriends().size() != 0) {
             for (final String id : person.getFriends()) {
-                ParcelFirebase.notifyToUserParcelList(id, new NotifyDataChange<List<Parcel>>() {
+                ParcelFirebase.notifyToUserFriendsParcelList(id, new NotifyDataChange<List<Parcel>>() {
                     @Override
                     public void OnDataChanged(List<Parcel> obj) {
 
