@@ -42,14 +42,14 @@ public class FriendsParcelsViewModel extends AndroidViewModel {
         super(application);
 
         friendsParcels = new ArrayList<>();
-
         allUsers = new ArrayList<>();
         UsersFirebase.stopNotifyToUserList();
         UsersFirebase.notifyToUserList(new NotifyDataChange<List<User>>() {
             @Override
             public void OnDataChanged(List<User> obj) {
                 allUsers = obj;
-                fragment.getRecyclerAdapter().notifyDataSetChanged();
+                if (fragment.getRecyclerAdapter() != null)
+                    fragment.getRecyclerAdapter().notifyDataSetChanged();
             }
 
             @Override
@@ -97,7 +97,7 @@ public class FriendsParcelsViewModel extends AndroidViewModel {
         SharedPreferences sharedPreferences = getApplication().getApplicationContext().getSharedPreferences("com.DDC.LastLoginData", Context.MODE_PRIVATE);
         String userID = sharedPreferences.getString("LastLoginUserID", null);
         // filter only the Persons in the contacts
-        UsersFirebase.stopNotifyToUserList();
+
         UsersFirebase.getUser(userID, new NotifyDataChange<Person>() {
             @Override
             public void OnDataChanged(Person obj) {
