@@ -1,11 +1,11 @@
 package com.ddc.UI.LogInScreen;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProviders;
-
-import android.app.Activity;
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -15,14 +15,15 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.lifecycle.ViewModelProviders;
+
 import com.ddc.MainActivity;
 import com.ddc.R;
 import com.ddc.UI.SignUpScreen.SignUpScreen;
 import com.ddc.Utils.MessageListener;
 import com.ddc.Utils.MessageReceiver;
-import com.google.firebase.auth.FirebaseAuth;
-
-import java.util.concurrent.TimeUnit;
 
 public class LogInActivity extends AppCompatActivity implements MessageListener {
 
@@ -46,7 +47,6 @@ public class LogInActivity extends AppCompatActivity implements MessageListener 
         this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 
         // check if the last login was in less then a week
-        // TODO: make it work!
         String lastUserID = logInViewModel.checkLastLogin(this);
         if(lastUserID != null)
         {
@@ -82,12 +82,8 @@ public class LogInActivity extends AppCompatActivity implements MessageListener 
             }
         });
 
-        // listener for sms
-        MessageReceiver messageReceiver = new MessageReceiver();
-        messageReceiver.bindListener(this);
-        IntentFilter mIntentFilter = new IntentFilter();
-        mIntentFilter.addAction("android.provider.Telephony.SMS_RECEIVED");
-        registerReceiver(messageReceiver, mIntentFilter);
+        if (checkPermission())
+            registerBroadcastReciver();
 
         // open the sign up screen
         TextView signUp = findViewById(R.id.signup_tv);
@@ -98,6 +94,15 @@ public class LogInActivity extends AppCompatActivity implements MessageListener 
                 startActivity(i);
             }
         });
+    }
+
+    private void registerBroadcastReciver() {
+        // listener for sms
+        MessageReceiver messageReceiver = new MessageReceiver();
+        messageReceiver.bindListener(this);
+        IntentFilter mIntentFilter = new IntentFilter();
+        mIntentFilter.addAction("android.provider.Telephony.SMS_RECEIVED");
+        registerReceiver(messageReceiver, mIntentFilter);
     }
 
     public void openMainScreen(String userID)
@@ -112,5 +117,28 @@ public class LogInActivity extends AppCompatActivity implements MessageListener 
     public void messageReceived(String message) {
         password_et.setText(message);
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+    }
+
+    public boolean checkPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED ||
+                    ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_SMS, Manifest.permission.RECEIVE_SMS}, 0);
+            }
+        }
+        return true;
+    }
+
+    @SuppressLint("MissingPermission")
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == 0) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission is granted
+                registerBroadcastReciver();
+            }
+        } else {
+            Toast.makeText(this, "תאלץ להזין את הקוד בצורה ידנית", Toast.LENGTH_SHORT).show();
+        }
     }
 }
