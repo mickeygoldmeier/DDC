@@ -1,5 +1,6 @@
 package com.ddc.UI.ViewHolders;
 
+import android.content.Intent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -12,6 +13,7 @@ import com.ddc.Model.Parcel.Parcel_Status;
 import com.ddc.Model.Users.Person;
 import com.ddc.R;
 import com.ddc.UI.FriendsParcels.FriendsParcelsViewModel;
+import com.ddc.UI.FriendsParcels.QRCodeScanner;
 
 public class FriendParcelViewHolder extends RecyclerView.ViewHolder {
 
@@ -46,8 +48,12 @@ public class FriendParcelViewHolder extends RecyclerView.ViewHolder {
         parcelTaken.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (viewModel != null)
-                    viewModel.deliverHaveTheParcel(parcel);
+                if (viewModel != null) {
+                    Intent i = new Intent(viewModel.getApplication(), QRCodeScanner.class);
+                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    i.putExtra("ParcelID", parcel.getParcelID());
+                    viewModel.getApplication().startActivity(i);
+                }
             }
         });
     }
@@ -68,9 +74,13 @@ public class FriendParcelViewHolder extends RecyclerView.ViewHolder {
         try {
             if (!parcel.getOptionalDelivers().contains(friend.getUserID()))
                 suggestDelivery.setVisibility(View.VISIBLE);
+            else
+                suggestDelivery.setVisibility(View.GONE);
 
             if (parcel.getSelectedDeliver().equals(friend.getUserID()) && parcel.getParcelStatus() == Parcel_Status.OnTheWay)
                 parcelTaken.setVisibility(View.VISIBLE);
+            else
+                parcelTaken.setVisibility(View.GONE);
         } catch (Exception e) {
         }
     }

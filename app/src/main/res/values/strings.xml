@@ -45,5 +45,5 @@
     <string name="system">System</string>
     <string name="logout">Log out</string>
     <string name="looking_for_code">Looking for QR code...</string>
-    <string name="aim_the_camera">Aim the camera to the QR code of your pacel</string>
+    <string name="aim_the_camera">Aim the camera to the parcel no.</string>
 </resources>

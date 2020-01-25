@@ -86,9 +86,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
         writeLoginToPhoneMemory(personID, this);
-
-        /*Intent i = new Intent(getApplicationContext(), QRCodeScanner.class);
-        startActivity(i);*/
     }
 
     @Override

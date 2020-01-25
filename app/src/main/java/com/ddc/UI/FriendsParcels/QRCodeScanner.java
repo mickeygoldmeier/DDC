@@ -3,10 +3,13 @@ package com.ddc.UI.FriendsParcels;
 import android.os.Bundle;
 import android.util.SparseArray;
 import android.view.WindowManager;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.ddc.Model.Parcel.Parcel;
 import com.ddc.R;
 import com.google.android.gms.vision.barcode.Barcode;
 
@@ -18,6 +21,7 @@ public class QRCodeScanner extends AppCompatActivity implements BarcodeReader.Ba
 
     private BarcodeReader barcodeReader;
     private FriendsParcelsViewModel viewModel;
+    private String parcelID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +38,12 @@ public class QRCodeScanner extends AppCompatActivity implements BarcodeReader.Ba
         this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 
         viewModel = ViewModelProviders.of(this).get(FriendsParcelsViewModel.class);
+
+        Bundle bundle = getIntent().getExtras();
+        parcelID = bundle.getString("ParcelID");
+
+        TextView tv = findViewById(R.id.qr_code_no_tv);
+        tv.setText(tv.getText() + " " + parcelID);
     }
 
     // single barcode scanned
@@ -41,9 +51,18 @@ public class QRCodeScanner extends AppCompatActivity implements BarcodeReader.Ba
     public void onScanned(Barcode barcode) {
         barcodeReader.pauseScanning();
         barcodeReader.playBeep();
-        if (barcode.displayValue.equals("123"))
-
-            barcodeReader.resumeScanning();
+        try {
+            Parcel parcel = viewModel.searchParcelByID(parcelID);
+            if (parcel.getParcelID().equals(barcode.displayValue)) {
+                viewModel.deliverHaveTheParcel(parcel);
+                finish();
+            }
+        } catch (Exception e) {
+            Toast.makeText(getBaseContext(), "שגיאה. נסה שוב מאוחר יותר", Toast.LENGTH_LONG).show();
+            finish();
+        }
+        Toast.makeText(getBaseContext(), "אופס... זה לא החבילה הנכונה", Toast.LENGTH_LONG).show();
+        barcodeReader.resumeScanning();
     }
 
     // multiple barcodes scanned

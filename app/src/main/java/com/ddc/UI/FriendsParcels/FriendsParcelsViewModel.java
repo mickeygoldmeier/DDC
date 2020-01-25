@@ -35,7 +35,7 @@ public class FriendsParcelsViewModel extends AndroidViewModel {
     private Person person;
     private List<Parcel> friendsParcels;
     private List<User> allUsers;
-    private FriendsParcelsFragment fragment;
+    private static FriendsParcelsFragment fragment;
     private FriendsParcelsViewModel thisViewModel;
 
     public FriendsParcelsViewModel(@NonNull Application application) {
@@ -206,10 +206,11 @@ public class FriendsParcelsViewModel extends AndroidViewModel {
         }
     }
 
-    private Parcel searchParcelByID(String id) {
+    public Parcel searchParcelByID(String id) {
         for (Parcel parcel : friendsParcels)
             if (parcel.getParcelID().equals(id))
                 return parcel;
         return null;
     }
+
 }
