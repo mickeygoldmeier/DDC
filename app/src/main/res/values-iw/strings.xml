@@ -37,4 +37,6 @@
     <string name="navigation_drawer_close">סגור תפריט צד</string>
     <string name="navigation_drawer_open">פתח תפריט צד</string>
     <string name="nav_header_subtitle">אין אינטנרט בינתיים</string>
+    <string name="looking_for_code">מחפש קוד QR...</string>
+    <string name="aim_the_camera">כוון את המצלמה לקוד הQR של החבילה שלך</string>
 </resources>

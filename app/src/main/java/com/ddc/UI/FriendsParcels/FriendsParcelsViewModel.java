@@ -80,7 +80,8 @@ public class FriendsParcelsViewModel extends AndroidViewModel {
                                 friendsParcels.add(parcel);
                         }
 
-                        fragment.onUsersChange();
+                        if (fragment != null)
+                            fragment.onUsersChange();
                     }
 
                     @Override
