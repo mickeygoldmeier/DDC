@@ -25,9 +25,12 @@ public class Parcel {
     private Parcel_Status parcelStatus;
     private String selectedDeliver;
     private List<String> optionalDelivers;
+    private boolean notified;
 
     public Parcel() {
         optionalDelivers = new ArrayList<>();
+        notified = false;
+        parcelStatus = Parcel_Status.Registered;
     }
 
     public Parcel(Parcel_Type type, boolean fragile, double weight, Address distributionCenterAddress, String recipientPhone, String parcelID, String companyID) {
@@ -41,7 +44,7 @@ public class Parcel {
         parcelStatus = Parcel_Status.Registered;
     }
 
-    public Parcel(Parcel_Type type, boolean fragile, double weight, Address distributionCenterAddress, String recipientPhone, String parcelID, String companyID,Parcel_Status parcel_status) {
+    public Parcel(Parcel_Type type, boolean fragile, double weight, Address distributionCenterAddress, String recipientPhone, String parcelID, String companyID, Parcel_Status parcel_status) {
         Type = type;
         Fragile = fragile;
         Weight = weight;
@@ -132,6 +135,14 @@ public class Parcel {
 
     public void setParcelID(String id) {
         ParcelID = id;
+    }
+
+    public boolean isNotified() {
+        return notified;
+    }
+
+    public void setNotified(boolean notified) {
+        this.notified = notified;
     }
 
     public void getIdFromDataBase() {

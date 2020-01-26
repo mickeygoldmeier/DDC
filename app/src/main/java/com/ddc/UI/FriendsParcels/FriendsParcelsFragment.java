@@ -45,6 +45,12 @@ public class FriendsParcelsFragment extends Fragment {
         return parcelRecyclerView.getAdapter();
     }
 
+    public void reloadRecyclerAdapter()
+    {
+        parcelRecyclerView.setAdapter(friendsParcelsViewModel.getNewParcelRecycleViewAdapter());
+        parcelRecyclerView.getAdapter().notifyDataSetChanged();
+    }
+
     public boolean checkPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {

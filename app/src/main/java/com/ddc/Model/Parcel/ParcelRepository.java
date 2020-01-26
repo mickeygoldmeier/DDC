@@ -216,9 +216,9 @@ public class ParcelRepository {
         protected Void doInBackground(Parcel... parcels) {
             if(repositorystate == RepositoryState.FIREBASE)
             {
-                ParcelFirebase.removeParcel(parcels[0], new Action<String>() {
+                ParcelFirebase.removeParcel(parcels[0], new Action<List<Parcel>>() {
                     @Override
-                    public void onSuccess(String obj) {
+                    public void onSuccess(List<Parcel> obj) {
 
                     }
 

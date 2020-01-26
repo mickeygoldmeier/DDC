@@ -1,14 +1,22 @@
 package com.ddc;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -16,9 +24,12 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.ddc.Model.NotifyDataChange;
+import com.ddc.Model.ServiceUpdate;
 import com.ddc.Model.Users.Person;
 import com.ddc.Model.Users.User;
 import com.ddc.Model.Users.UsersFirebase;
+import com.ddc.Utils.BackgroundReciever;
+import com.ddc.Utils.MessageReceiver;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
@@ -85,6 +96,18 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        if(checkPermission())
+        {
+            //Start service:
+
+                startService(new Intent(this, ServiceUpdate.class));
+
+
+            BackgroundReciever backgroundReciever = new BackgroundReciever();
+            IntentFilter mIntentFilter = new IntentFilter();
+            registerReceiver(backgroundReciever, mIntentFilter);
+        }
+
         writeLoginToPhoneMemory(personID, this);
     }
 
@@ -109,5 +132,31 @@ public class MainActivity extends AppCompatActivity {
         editor.putString("LastLoginTime", Calendar.getInstance().getTime().toString());
         editor.putString("LastLoginUserID", person);
         editor.apply();
+    }
+
+    public boolean checkPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.FOREGROUND_SERVICE) != PackageManager.PERMISSION_GRANTED ||
+                    ActivityCompat.checkSelfPermission(this, Manifest.permission.RECEIVE_BOOT_COMPLETED) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.FOREGROUND_SERVICE, Manifest.permission.RECEIVE_BOOT_COMPLETED}, 2);
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @SuppressLint("MissingPermission")
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == 2) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission is granted
+                BackgroundReciever backgroundReciever = new BackgroundReciever();
+                IntentFilter mIntentFilter = new IntentFilter();
+                registerReceiver(backgroundReciever, mIntentFilter);
+            }
+        } else {
+            Toast.makeText(this, "לא תוכל לקבל התראות על עדכונים של החבילות שלך", Toast.LENGTH_SHORT).show();
+        }
     }
 }

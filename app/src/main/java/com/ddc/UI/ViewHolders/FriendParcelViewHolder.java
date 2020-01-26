@@ -28,7 +28,7 @@ public class FriendParcelViewHolder extends RecyclerView.ViewHolder {
     Person user;
     Person friend;
 
-    public FriendParcelViewHolder(@NonNull View itemView) {
+    public FriendParcelViewHolder(@NonNull final View itemView) {
         super(itemView);
 
         suggestDelivery = itemView.findViewById(R.id.suggest_delivery_btn);
@@ -79,8 +79,7 @@ public class FriendParcelViewHolder extends RecyclerView.ViewHolder {
 
             if (parcel.getSelectedDeliver().equals(friend.getUserID()) && parcel.getParcelStatus() == Parcel_Status.OnTheWay)
                 parcelTaken.setVisibility(View.VISIBLE);
-            else
-                parcelTaken.setVisibility(View.GONE);
+
         } catch (Exception e) {
         }
     }

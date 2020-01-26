@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ddc.Model.Action;
 import com.ddc.Model.NotifyDataChange;
+import com.ddc.Model.Parcel.HistoryParcelFirebase;
 import com.ddc.Model.Parcel.Parcel;
 import com.ddc.Model.Parcel.ParcelFirebase;
 import com.ddc.Model.Parcel.Parcel_Status;
@@ -126,6 +127,7 @@ public class FriendsParcelsViewModel extends AndroidViewModel {
 
     public void addOptionalDeliver(Parcel parcel, String id) {
         parcel.addOptionalDeliver(id);
+        parcel.setNotified(false);
         parcel.setParcelStatus(Parcel_Status.CollectionOffered);
         ParcelFirebase.updateParcel(parcel, new Action<String>() {
             @Override
@@ -147,7 +149,8 @@ public class FriendsParcelsViewModel extends AndroidViewModel {
 
     public void deliverHaveTheParcel(final Parcel parcel) {
         parcel.setParcelStatus(Parcel_Status.Delivered);
-        ParcelFirebase.updateParcel(parcel, new Action<String>() {
+        parcel.setNotified(false);
+        HistoryParcelFirebase.addParcel(parcel, new Action<String>() {
             @Override
             public void onSuccess(String obj) {
                 new AlertDialog.Builder(fragment.getContext())
@@ -174,8 +177,39 @@ public class FriendsParcelsViewModel extends AndroidViewModel {
                     }
                 } catch (Exception e) {
                 }
+                ParcelFirebase.removeParcel(parcel, new Action<List<Parcel>>() {
+                    @Override
+                    public void onSuccess(List<Parcel> obj) {
+                        int position = -1;
+                        for (Parcel parcel1:friendsParcels){
+                            if (parcel1.getParcelID().equals(parcel.getParcelID())) {
+                                position = friendsParcels.indexOf(parcel1);
+                                friendsParcels.remove(position);
+                                break;
+                            }
+                        }
+                        /*if (position != -1) {
+                            fragment.getRecyclerAdapter().notifyItemRemoved(position);
+                            fragment.getRecyclerAdapter().notifyItemRangeChanged(position,1);
+                        }*/
+                        fragment.reloadRecyclerAdapter();
+                        if (position != -1) {
+                            fragment.getRecyclerAdapter().notifyItemRemoved(position);
+                            fragment.getRecyclerAdapter().notifyItemRangeChanged(position, 1);
+                        }
 
-                fragment.getRecyclerAdapter().notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onFailure(Exception exception) {
+
+                    }
+
+                    @Override
+                    public void onProgress(String status, double percent) {
+
+                    }
+                });
             }
 
             @Override

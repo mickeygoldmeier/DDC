@@ -1,0 +1,94 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 4,
+    "identityHash": "ba62a554441df614075dec3063b8f616",
+    "entities": [
+      {
+        "tableName": "parcels_table",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`ParcelID` TEXT NOT NULL, `Type` TEXT, `Fragile` INTEGER NOT NULL, `Weight` REAL NOT NULL, `DistributionCenterAddress` TEXT, `RecipientPhone` TEXT, `CompanyID` TEXT, `parcelStatus` TEXT, `selectedDeliver` TEXT, `optionalDelivers` TEXT, `notified` INTEGER NOT NULL, PRIMARY KEY(`ParcelID`))",
+        "fields": [
+          {
+            "fieldPath": "ParcelID",
+            "columnName": "ParcelID",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "Type",
+            "columnName": "Type",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "Fragile",
+            "columnName": "Fragile",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "Weight",
+            "columnName": "Weight",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "DistributionCenterAddress",
+            "columnName": "DistributionCenterAddress",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "RecipientPhone",
+            "columnName": "RecipientPhone",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "CompanyID",
+            "columnName": "CompanyID",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "parcelStatus",
+            "columnName": "parcelStatus",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "selectedDeliver",
+            "columnName": "selectedDeliver",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "optionalDelivers",
+            "columnName": "optionalDelivers",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "notified",
+            "columnName": "notified",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "ParcelID"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'ba62a554441df614075dec3063b8f616')"
+    ]
+  }
+}
