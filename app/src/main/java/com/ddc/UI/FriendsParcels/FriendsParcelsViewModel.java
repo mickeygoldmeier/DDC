@@ -2,17 +2,14 @@ package com.ddc.UI.FriendsParcels;
 
 import android.app.Application;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
+import android.telephony.SmsManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -148,7 +145,7 @@ public class FriendsParcelsViewModel extends AndroidViewModel {
         ParcelFirebase.updateParcel(parcel, new Action<String>() {
             @Override
             public void onSuccess(String obj) {
-                new AlertDialog.Builder(fragment.getContext())
+                /*new AlertDialog.Builder(fragment.getContext())
                         .setTitle("הודע לבעלים של החבילה")
                         .setMessage("מזל טוב!\nעכשיו אתה צריך להעביר את החבילה לבעלים שלה.\nרוצה להתקשר אליו?")
                         .setPositiveButton("כן", new DialogInterface.OnClickListener() {
@@ -160,7 +157,18 @@ public class FriendsParcelsViewModel extends AndroidViewModel {
                             }
                         })
                         .setNegativeButton("אין צורך", null)
-                        .show();
+                        .show();*/
+
+                try {
+                    if (fragment.checkPermission()) {
+                        SmsManager smgr = SmsManager.getDefault();
+                        String massage = "החבילה שלך (חבילה מספר " + parcel.getParcelID() + ") עושה את דרכה אליך ממש ברגעים אלה באמצעות החבר שבחרת שיעביר לך אותה!" +
+                                "\nאתה מוזמן ליצור איתו קשר במספר: " + parcel.getSelectedDeliver();
+                        smgr.sendTextMessage(parcel.getRecipientPhone(), null, massage, null, null);
+                    }
+                } catch (Exception e) {
+                }
+
                 fragment.getRecyclerAdapter().notifyDataSetChanged();
             }
 
