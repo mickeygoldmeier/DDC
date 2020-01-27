@@ -14,11 +14,11 @@
     <string name="sign_in">Come here often? lets open an account!</string>
     <string name="enter_your_password">Can you tell us your secret password?</string>
 
-    <string name="menu_home">Home</string>
-    <string name="menu_gallery">Gallery</string>
-    <string name="menu_slideshow">Slideshow</string>
-    <string name="menu_tools">Tools</string>
-    <string name="menu_share">Share</string>
+    <string name="menu_friends_parcels">Friends Parcels</string>
+    <string name="menu_my_parcels">My Parcels</string>
+    <string name="menu_find_friends">Find Friends</string>
+    <string name="menu_parcel_history">Parcel History</string>
+    <string name="menu_log_out">Log Out</string>
     <string name="menu_send">Send</string>
     <string name="welcome">Welcome!</string>
     <string name="create_acount">Create a new acount</string>

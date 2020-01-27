@@ -104,7 +104,13 @@ public class Parcel {
     }
 
     public void setOptionalDelivers(List<String> optionalDelivers) {
-        this.optionalDelivers = optionalDelivers;
+        List<String> list = new ArrayList<>();
+
+        for(String id : optionalDelivers)
+            if(id != null && id.length() > 5)
+                list.add(id);
+
+        this.optionalDelivers = list;
     }
 
     public void setWeight(double weight) throws Exception {

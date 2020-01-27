@@ -39,4 +39,9 @@
     <string name="nav_header_subtitle">אין אינטנרט בינתיים</string>
     <string name="looking_for_code">מחפש קוד QR...</string>
     <string name="aim_the_camera">כוון את המצלמה לחבילה שמספרה</string>
+    <string name="menu_friends_parcels">חבילות של חברים</string>
+    <string name="menu_my_parcels">החבילות שלי</string>
+    <string name="menu_find_friends">מצא חברים</string>
+    <string name="menu_parcel_history">היסטוריית חבילות</string>
+    <string name="menu_log_out">התנתקות</string>
 </resources>

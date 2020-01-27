@@ -67,73 +67,10 @@ public class ServiceUpdate extends LifecycleService {
         if (allParcel.getValue() != null) {
             for (Parcel parcel : allParcel.getValue())
                 if (!parcel.isNotified()) {
-                    //generateNotification(parcel);
                     createAndShowForegroundNotification(this, ++ID, parcel);
                     parcel.setNotified(true);
                     repository.update(parcel);
                 }
-        }
-    }
-
-    private void generateNotification(Parcel parcel) {
-        String massege = "";
-        String tilte = "";
-
-        switch (parcel.getParcelStatus()) {
-            case Registered:
-                massege = "יש לך חבילה חדשה שמחכה לך במחסן, שמספרה " + parcel.getParcelID() + "\nברגע שאחד מהחברים שלך יציע לאסוף אותה תקבל הודעה מתאימה";
-                tilte = "חבילה חדשה!";
-                break;
-            case CollectionOffered:
-                massege = "מישהו הציע לאסוף עבורך את החבילה שמספרה " + parcel.getParcelID() + "!\n"
-                        + "כנס לאפליקציה על מנת לאשר לו את ההובלה";
-                tilte = "איזה מזל שיש חברים";
-                break;
-            case Delivered:
-                massege = "החבילה שלך (חבילה מספר " + parcel.getParcelID() + ") נמצאת כעת בדרכה אליך.\n" +
-                        "אתה מוזמן ליצור קשר עם החבר שמוביל אותה במספר " + parcel.getSelectedDeliver();
-                tilte = "חבילה בדרך אליך!";
-                break;
-            default:
-                return;
-        }
-
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            String channelId = getString(R.string.app_name);
-            NotificationChannel notificationChannel = new NotificationChannel(channelId, channelId, NotificationManager.IMPORTANCE_DEFAULT);
-            notificationChannel.setDescription(channelId);
-            notificationChannel.setVibrationPattern(new long[]{0, 500, 500, 300});
-            notificationChannel.setLightColor(Color.BLUE);
-            notificationChannel.enableLights(true);
-            notificationChannel.enableVibration(true);
-            notificationChannel.setSound(null, null);
-            notificationManager.createNotificationChannel(notificationChannel);
-            Notification notification = new Notification.Builder(getApplicationContext(), channelId)
-                    .setContentTitle(tilte)
-                    .setContentText(massege)
-                    .setStyle(new Notification.BigTextStyle()
-                            .bigText(""))
-                    .setSmallIcon(R.mipmap.app_icon)
-                    .setPriority(Notification.PRIORITY_DEFAULT)
-                    .build();
-            notificationManager.notify(ID++, notification);
-        } else {
-            NotificationCompat.Builder builder =
-                    new NotificationCompat.Builder(getApplicationContext())
-                            .setSmallIcon(R.mipmap.app_icon)
-                            .setContentTitle(tilte)
-                            .setStyle(new NotificationCompat.BigTextStyle()
-                                    .bigText(""))
-                            .setVibrate(new long[]{0, 500, 500, 300})
-                            .setLights(Color.RED, 500, 500)
-                            .setContentText(massege);
-
-            Intent targetIntent = new Intent(getApplicationContext(), MainActivity.class);
-            PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, targetIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-            builder.setContentIntent(contentIntent);
-            NotificationManager nManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            nManager.notify(ID++, builder.build());
         }
     }
 
@@ -170,6 +107,8 @@ public class ServiceUpdate extends LifecycleService {
                 .setPriority(Notification.PRIORITY_DEFAULT)
                 .setStyle(new NotificationCompat.BigTextStyle()
                         .bigText(""))
+                .setVibrate(new long[]{0,300,200,300})
+                .setLights(555,300,400)
                 .setContentText(massege);
 
         NotificationManager manager = (NotificationManager)getSystemService(Service.NOTIFICATION_SERVICE);

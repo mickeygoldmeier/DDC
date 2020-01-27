@@ -8,36 +8,31 @@
     <fragment
         android:id="@+id/nav_friends_parcels"
         android:name="com.ddc.UI.FriendsParcels.FriendsParcelsFragment"
-        android:label="@string/menu_home"
+        android:label="@string/menu_friends_parcels"
         tools:layout="@layout/fragment_friends_parcels" />
 
     <fragment
         android:id="@+id/nav_my_parcels"
         android:name="com.ddc.UI.MyParcelsScreen.MyParcelsFragment"
-        android:label="@string/menu_gallery"
+        android:label="@string/menu_my_parcels"
         tools:layout="@layout/fragment_my_parcels" />
 
     <fragment
         android:id="@+id/nav_slideshow"
         android:name="com.ddc.UI.FindFriendsScreen.FindFriendsFragment"
-        android:label="@string/menu_slideshow"
+        android:label="@string/menu_find_friends"
         tools:layout="@layout/find_friends_slideshow" />
 
     <fragment
         android:id="@+id/nav_tools"
-        android:name="com.ddc.UI.tools.ToolsFragment"
-        android:label="@string/menu_tools"
-        tools:layout="@layout/fragment_tools" />
+        android:name="com.ddc.UI.ParcelHistory.ParcelHistoryFragment"
+        android:label="@string/menu_parcel_history"
+        tools:layout="@layout/fragment_parcel_history" />
 
     <fragment
         android:id="@+id/nav_share"
         android:name="com.ddc.UI.LogOutScreen.LogOutFragment"
-        android:label="@string/menu_share"
+        android:label="@string/menu_log_out"
         tools:layout="@layout/fragment_log_out" />
 
-    <fragment
-        android:id="@+id/nav_send"
-        android:name="com.ddc.UI.send.SendFragment"
-        android:label="@string/menu_send"
-        tools:layout="@layout/fragment_send" />
 </navigation>

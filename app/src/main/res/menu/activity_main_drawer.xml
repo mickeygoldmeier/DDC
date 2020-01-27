@@ -18,20 +18,16 @@
             android:title="@string/add_friends" />
         <item
             android:id="@+id/nav_tools"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="@string/menu_tools" />
+            android:icon="@drawable/ic_history"
+            android:title="@string/menu_parcel_history" />
     </group>
 
-    <item android:title="@string/system">
+    <item android:title="">
         <menu>
             <item
                 android:id="@+id/nav_share"
                 android:icon="@drawable/ic_log_out"
                 android:title="@string/logout" />
-            <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="@string/menu_send" />
         </menu>
     </item>
 

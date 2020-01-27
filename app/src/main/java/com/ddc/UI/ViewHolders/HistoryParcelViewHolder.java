@@ -1,7 +1,6 @@
 package com.ddc.UI.ViewHolders;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.view.View;
@@ -13,19 +12,14 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ddc.Model.Parcel.Parcel;
 import com.ddc.Model.Parcel.Parcel_Status;
-import com.ddc.Model.Users.Person;
 import com.ddc.R;
-import com.ddc.UI.MyParcelsScreen.MyParcelsViewModel;
 import com.ddc.Utils.ParcelDataConvertor;
 
-import java.util.HashMap;
-
-public class ParcelViewHolder extends RecyclerView.ViewHolder {
+public class HistoryParcelViewHolder extends RecyclerView.ViewHolder {
 
     private Parcel parcel;
     private LinearLayout extraInfo;
@@ -39,9 +33,8 @@ public class ParcelViewHolder extends RecyclerView.ViewHolder {
     private LinearLayout chooseDeliverMenu;
     private Button chooseDeliver;
     private boolean expanded;
-    private MyParcelsViewModel viewModel;
 
-    public ParcelViewHolder(@NonNull View itemView) {
+    public HistoryParcelViewHolder(@NonNull View itemView) {
         super(itemView);
 
         extraInfo = itemView.findViewById(R.id.extra_info_ll);
@@ -57,9 +50,8 @@ public class ParcelViewHolder extends RecyclerView.ViewHolder {
         expanded = false;
     }
 
-    public void fillView(Parcel parcel_, Context context, MyParcelsViewModel viewModel_, HashMap<String, Person> stringPersonHashMap) {
+    public void fillView(Parcel parcel_, Context context) {
         this.parcel = parcel_;
-        this.viewModel = viewModel_;
 
         typeImage.setImageResource(ParcelDataConvertor.typeToImageInt(parcel.getType()));
         parcelID.setText(parcel.getParcelID());
@@ -75,42 +67,13 @@ public class ParcelViewHolder extends RecyclerView.ViewHolder {
 
         RadioButton button;
         optionalDelivers.removeAllViews();
-        for (String id : parcel.getOptionalDelivers()) {
-            if(stringPersonHashMap.containsKey(id)) {
-                Person person = stringPersonHashMap.get(id);
-                id = person.getFirstName() + " " + person.getLastName();
-            }
+        for (String name : parcel.getOptionalDelivers()) {
             button = new RadioButton(context);
-            button.setText(id);
+            button.setText(name);
             button.setTextColor(Color.GRAY);
             button.setButtonTintList(ColorStateList.valueOf(context.getResources().getColor(R.color.colorPrimaryDark)));
             optionalDelivers.addView(button);
         }
-
-        chooseDeliver.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                try {
-                    new AlertDialog.Builder(view.getContext())
-                            .setTitle("בחירת חבר להעברה")
-                            .setMessage("האם אתה בטוח שאתה רוצה שהחבר שבחרת יעביר עבורך את החבילה? זוהי פעולה בלתי הפיכה וממולץ להעביר חבילות רק עם חברים שאתה מכיר ושאתה יכול לסמוך עליהם")
-                            .setPositiveButton("סומך עליו", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    int radioButtonID = optionalDelivers.getCheckedRadioButtonId();
-                                    View radioButton = optionalDelivers.findViewById(radioButtonID);
-                                    int idx = optionalDelivers.indexOfChild(radioButton);
-                                    String deliverID = parcel.getOptionalDelivers().get(idx);
-                                    viewModel.chooseParcelDeliver(parcel, deliverID);
-                                }
-                            })
-                            .setNegativeButton("אני מתחרט", null)
-                            .setIcon(R.drawable.ic_local_shipping)
-                            .show();
-                } catch (Exception e) {
-                }
-            }
-        });
     }
 
     public boolean isExpanded() {
